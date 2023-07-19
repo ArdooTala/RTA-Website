@@ -1,0 +1,34 @@
+POST https://localhost:5000/parts
+
+###
+
+POST https://localhost:5000/parts
+content-type: application/json
+
+{
+    "_id":{"$oid":"649c79c46b85d18f14e881cd"},
+    "assembly":{
+        "assembly_name":"Cluster_05",
+        "part_name":"P-007"
+    },
+    "operations":[
+        {
+            "type":"0",
+            "timestamp":{"$date":{"$numberLong":"1687976388180"}},
+            "result":"sm_succeeded",
+            "executer":"/Mercedes/",
+            "reports":[
+                {"key":"final_pos","value":"132"}
+            ]
+        },
+        {
+            "type":"1",
+            "timestamp":{"$date":{"$numberLong":"1687976396375"}},
+            "result":"sm_succeeded",
+            "executer":"/Mercedes/",
+            "reports":[
+                {"key":"final_pos","value":"3"}
+            ]
+        }
+    ]
+}

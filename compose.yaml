@@ -1,0 +1,37 @@
+# for local development
+version: "3.7"
+
+services:
+  backend:
+    build:
+      context: ./server
+      target: "develop-stage"
+    ports:
+      - "5000:5000"
+    volumes:
+      - "./server:/server"
+    stdin_open: true
+    tty: true
+    # entrypoint: "/bin/sh"
+    command: /bin/sh -c "npm run dev"
+    depends_on:
+      - mongodb   
+
+  frontend:
+    build:
+      context: ./rta-app
+      target: "develop-stage"
+    ports:
+      - "8000:8000"
+    volumes:
+      - "./rta-app:/app"
+    command: /bin/sh -c "npm run dev"
+    depends_on:
+      - backend
+
+  mongodb:
+    image: mongodb/mongodb-community-server
+    environment:
+      - MONGODB_INITDB_ROOT_USERNAME=user
+      - MONGODB_INITDB_ROOT_PASSWORD=pass
+
