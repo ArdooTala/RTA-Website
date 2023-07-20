@@ -26,7 +26,7 @@ export default {
 </script>
 
 <template>
-  <div class="accordion accordion-flush rounded-4 m-1 overflow-hidden" id="accordionExample" data-bs-theme="dark">
+  <div class="accordion accordion-flush rounded-4 overflow-hidden" id="accordionExample" data-bs-theme="dark">
     <div
       v-for="ass in assemblies"
       class="accordion-item p-2 border-bottom"
@@ -45,7 +45,7 @@ export default {
           </button>
 
           <button
-            class="btn dropdown-toggle dropdown-toggle-split ms-1 border-start"
+            class="btn dropdown-toggle dropdown-toggle-split ms-1 "
             type="button"
             data-bs-toggle="collapse"
             :data-bs-target="'#' + ass._id"

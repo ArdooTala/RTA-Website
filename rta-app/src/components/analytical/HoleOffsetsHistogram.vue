@@ -1,71 +1,106 @@
 <template>
-    <div
-      class="ratio ratio-1x1 rounded-4 bg-dark overflow-hidden"
-      data-bs-theme="dark"
-    >
-      <div class="p-2">
-        <v-chart class="chart" :option="option" />
-      </div>
+  <div
+    class="ratio ratio-1x1 rounded-4 bg-dark overflow-hidden"
+    data-bs-theme="dark"
+  >
+    <div class="p-2">
+      <v-chart class="chart" :option="option" />
     </div>
-  </template>
-  
-  <script setup>
-  import { use } from "echarts/core";
-  import { SVGRenderer } from "echarts/renderers";
-  import { PieChart } from "echarts/charts";
-  import {
-    TitleComponent,
-    TooltipComponent,
-    LegendComponent,
-  } from "echarts/components";
-  import VChart, { THEME_KEY } from "vue-echarts";
-  import { ref, provide } from "vue";
-  
-  use([SVGRenderer, PieChart, TitleComponent, TooltipComponent, LegendComponent]);
-  
-  provide(THEME_KEY, "dark");
-  
-  const option = ref({
-    backgroundColor: "rgba(0,0,0,0)",
-    title: {
-      text: "WORKLOAD",
-      left: "left",
-    },
-    tooltip: {
-      trigger: "item",
-      formatter: "{a} <br/>{b} : {c} ({d}%)",
-    },
-    legend: {
-      orient: "horizontal",
-      left: "left",
-      top: "bottom",
-      data: ["Svetlana", "Mercedes"],
-    },
-    series: [
-      {
-        name: "Parts Assembled",
-        type: "pie",
-        radius: ["30%", "60%"],
-        center: ["50%", "50%"],
-        data: [
-          { value: 35, name: "Svetlana" },
-          { value: 31, name: "Mercedes" },
-        ],
-        emphasis: {
-          itemStyle: {
-            shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowColor: "rgba(0, 0, 0, 0.5)",
-          },
-        },
+  </div>
+</template>
+
+<script setup>
+import { use } from "echarts/core";
+import { SVGRenderer } from "echarts/renderers";
+import { BarChart, ScatterChart } from "echarts/charts";
+import {
+  TitleComponent,
+  TooltipComponent,
+  LegendComponent,
+} from "echarts/components";
+import VChart, { THEME_KEY } from "vue-echarts";
+import { ref, provide, computed } from "vue";
+
+use([
+  SVGRenderer,
+  ScatterChart,
+  BarChart,
+  TitleComponent,
+  TooltipComponent,
+  LegendComponent,
+]);
+
+provide(THEME_KEY, "dark");
+
+// option = {
+//   xAxis: {
+//     type: "category",
+//     data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+//   },
+//   yAxis: {
+//     type: "value",
+//   },
+//   series: [
+//     {
+//       data: [120, 200, 150, 80, 70, 110, 130],
+//       type: "bar",
+//       showBackground: true,
+//       backgroundStyle: {
+//         color: "rgba(180, 180, 180, 0.2)",
+//       },
+//     },
+//   ],
+// };
+
+const props = defineProps(["holeOffsets"]);
+
+const holeDist = computed(() => {
+  let dists = props.holeOffsets.map((x) =>
+    Math.sqrt(x[0] * x[0] + x[1] * x[1])
+  );
+  let grouped = dists.reduce(
+    (entryMap, e) =>
+      entryMap.set(Math.round(e), [...(entryMap.get(Math.round(e, 0.2)) || []), e]),
+    new Map()
+  );
+  let histogram = Array.from(grouped.entries());
+  return histogram.map((x) => [x[0], x[1].length]);
+});
+
+const option = ref({
+  backgroundColor: "rgba(0,0,0,0)",
+  title: {
+    text: "HOLES OFFSET",
+    left: "left",
+  },
+  tooltip: {
+    trigger: "item",
+    formatter: "Distance~{c} Holes",
+  },
+  xAxis: {
+    type: "value",
+    boundaryGap: ['30%', '30%']
+  },
+  yAxis: {
+    type: "value",
+    onZero: false,
+    interval: 5
+  },
+  series: [
+    {
+      data: holeDist,
+      type: "bar",
+      showBackground: false,
+      backgroundStyle: {
+        color: "rgba(180, 180, 180, 0.2)",
       },
-    ],
-  });
-  </script>
-  
-  <style scoped>
-  /* .chart {
+    },
+  ],
+});
+</script>
+
+<style scoped>
+/* .chart {
     height: 100px;
   } */
-  </style>
-  
+</style>
