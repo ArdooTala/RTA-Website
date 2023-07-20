@@ -79,11 +79,15 @@ const option = ref({
   },
   xAxis: {
     type: "value",
-    boundaryGap: ['30%', '30%']
+    interval: 1,
+    boundaryGap: ['30%', '20%']
   },
   yAxis: {
     type: "value",
     onZero: false,
+    axisLine: {
+      onZero: false
+    },
     interval: 5
   },
   series: [

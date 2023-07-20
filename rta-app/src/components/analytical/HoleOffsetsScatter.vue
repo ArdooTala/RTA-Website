@@ -43,12 +43,6 @@ const option = ref({
     trigger: "item",
     formatter: "{a} <br/>{b} : {c} ({d}%)",
   },
-  legend: {
-    orient: "horizontal",
-    left: "left",
-    top: "bottom",
-    data: ["Svetlana", "Mercedes"],
-  },
   xAxis: {
     interval: 0.5,
     boundaryGap: ['10%', '10%']
