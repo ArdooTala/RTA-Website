@@ -4,7 +4,7 @@
     data-bs-theme="dark"
   >
     <div class="p-2">
-      <v-chart class="chart" :option="option" />
+      <v-chart class="chart" :option="option" autoresize />
     </div>
   </div>
 </template>

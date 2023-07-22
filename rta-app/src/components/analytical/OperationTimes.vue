@@ -1,7 +1,10 @@
 <template>
-  <div class="rounded-4 h-100 bg-dark overflow-hidden" data-bs-theme="dark">
+  <div
+    class=" rounded-4 h-100 bg-dark overflow-hidden"
+    data-bs-theme="dark"
+  >
     <div class="p-2 h-100">
-      <v-chart class="chart" :option="option" />
+      <v-chart class="chart" :option="option" autoresize />
     </div>
   </div>
 </template>
@@ -9,7 +12,7 @@
 <script setup>
 import { use } from "echarts/core";
 import { SVGRenderer } from "echarts/renderers";
-import { LineChart } from "echarts/charts";
+import { LineChart, BarChart, CandlestickChart } from "echarts/charts";
 import {
   TitleComponent,
   TooltipComponent,
@@ -21,6 +24,9 @@ import { ref, provide } from "vue";
 use([
   SVGRenderer,
   LineChart,
+  BarChart,
+  ,
+  CandlestickChart,
   TitleComponent,
   TooltipComponent,
   LegendComponent,
@@ -36,25 +42,61 @@ const option = ref({
     left: "left",
   },
   backgroundColor: "rgba(0,0,0,0)",
-  xAxis: {
-    type: "value",
-    boundaryGap: false,
-    interval: 2,
-  },
-  yAxis: {
-    type: "time",
-    boundaryGap: ["10%", "10%"],
-  },
-  series: [
+  xAxis: [
     {
-      data: props.timestamps,
-      type: "line",
+      type: "value",
+      boundaryGap: false,
+      interval: 2,
+    },
+  ],
+  yAxis: [
+    {
+      type: "time",
+      scale: true,
+      boundaryGap: ["10%", "10%"],
     },
   ],
   tooltip: {
     trigger: "item",
     formatter: "{c}",
   },
+  series: [
+    {
+      data: props.timestamps.map((v, i) => [i, v]),
+      type: "line",
+    },
+    {
+      type: "candlestick",
+      data: props.timestamps.slice(1).map((v, i) => {
+        return [
+            i + 1,
+            props.timestamps[i], 
+            v,
+            props.timestamps[i], 
+            v,
+        ];
+      }),
+    },
+    // {
+    //   data: props.timestamps.slice(1).map((v, i) => [i+2, v]),
+    //   type: "bar",
+    // //   stack: "times"
+    // },
+    // {
+    //   data: props.timestamps.slice(1).map((v, i) => [i+1, v]),
+    //   type: "bar",
+    // //   stack: "times"
+    // },
+    // {
+    //   data: props.timestamps.slice(1).map((v, i) => [i, v - props.timestamps[i]]),
+    //   type: "bar",
+    //   stack: "times"
+    // },
+    // {
+    //   data: props.timestamps.map((v, i) => [i, v - 1000000]),
+    //   type: "bar",
+    // },
+  ],
   // legend: {
   //   orient: "horizontal",
   //   left: "left",

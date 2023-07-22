@@ -7,19 +7,19 @@ import OperationTimes from "../components/analytical/OperationTimes.vue";
 import { ref } from "vue";
 
 let mockData = []
-for (let i = 0; i < 32; i++) {
+for (let i = 0; i < 23; i++) {
   mockData.push([(Math.random()- 0.5) * 5, (Math.random() - 0.5) * 5])
 }
 
 let mockDates = []
 let t = new Date(2023, 7, 12, 18, 21, 0, 0).getTime()
-for (let i = 0; i < 32; i++) {
-  t += i * Math.random() * 10000
-  mockDates.push([i, new Date(t)])
+for (let i = 0; i < 23; i++) {
+  t += Math.random() * 10000 + 1000
+  mockDates.push(new Date(t))
 }
 
-console.log(mockData)
-console.log(mockDates)
+// console.log(mockData)
+// console.log(mockDates)
 
 const holeOffsets = ref(mockData);
 </script>
