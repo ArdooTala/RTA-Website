@@ -20,8 +20,6 @@
       <div class="progress col-9" role="progressbar" aria-label="Basic" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
         <div class="progress-bar w-75">75%</div>
       </div>
-
-      <button type="button" class="btn btn-dark border">Open in Dashboard</button>
     </div>
   </div>
 </template>

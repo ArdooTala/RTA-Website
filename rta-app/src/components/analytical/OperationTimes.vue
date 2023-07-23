@@ -1,6 +1,6 @@
 <template>
   <div
-    class=" rounded-4 h-100 bg-dark overflow-hidden"
+    class="ratio ratio-16x9 rounded-4 h-100 bg-dark overflow-hidden"
     data-bs-theme="dark"
   >
     <div class="p-2 h-100">
@@ -77,32 +77,7 @@ const option = ref({
         ];
       }),
     },
-    // {
-    //   data: props.timestamps.slice(1).map((v, i) => [i+2, v]),
-    //   type: "bar",
-    // //   stack: "times"
-    // },
-    // {
-    //   data: props.timestamps.slice(1).map((v, i) => [i+1, v]),
-    //   type: "bar",
-    // //   stack: "times"
-    // },
-    // {
-    //   data: props.timestamps.slice(1).map((v, i) => [i, v - props.timestamps[i]]),
-    //   type: "bar",
-    //   stack: "times"
-    // },
-    // {
-    //   data: props.timestamps.map((v, i) => [i, v - 1000000]),
-    //   type: "bar",
-    // },
   ],
-  // legend: {
-  //   orient: "horizontal",
-  //   left: "left",
-  //   top: "bottom",
-  //   data: ["Svetlana", "Mercedes"],
-  // },
 });
 </script>
 

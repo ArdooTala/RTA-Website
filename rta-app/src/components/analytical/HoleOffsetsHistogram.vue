@@ -50,7 +50,7 @@ const holeDist = computed(() => {
 const option = ref({
   backgroundColor: "rgba(0,0,0,0)",
   title: {
-    text: "HOLES OFFSET",
+    text: "HOLES OFFSET HISTOGRAM",
     left: "left",
   },
   tooltip: {

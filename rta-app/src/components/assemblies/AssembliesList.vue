@@ -26,11 +26,12 @@ export default {
 </script>
 
 <template>
-  <div class="accordion accordion-flush rounded-4 overflow-hidden" id="accordionExample" data-bs-theme="dark">
-    <div
-      v-for="ass in assemblies"
-      class="accordion-item p-2 border-bottom"
-    >
+  <div
+    class="accordion accordion-flush rounded-4 overflow-hidden"
+    id="accordionExample"
+    data-bs-theme="dark"
+  >
+    <div v-for="ass in assemblies" class="accordion-item p-2 border-bottom">
       <div class="accordion-header justify-content-between">
         <div class="btn-group w-100 justify-content-between">
           <button
@@ -45,7 +46,7 @@ export default {
           </button>
 
           <button
-            class="btn dropdown-toggle dropdown-toggle-split ms-1 "
+            class="btn dropdown-toggle dropdown-toggle-split ms-1"
             type="button"
             data-bs-toggle="collapse"
             :data-bs-target="'#' + ass._id"
@@ -61,7 +62,6 @@ export default {
         data-bs-parent="#accordionExample"
       >
         <div class="accordion-body bg-transparent">
-          
           <AssemblyCard class="">
             <template #icon><EcosystemIcon /></template>
             <template #start>{{ ass._id }}</template>
@@ -69,6 +69,7 @@ export default {
             <template #parts_count>{{ ass.count }}</template>
           </AssemblyCard>
 
+          <button type="button" class="btn btn-dark border">Open in Dashboard</button>
         </div>
       </div>
     </div>
