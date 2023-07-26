@@ -1,10 +1,12 @@
 <template>
-  <div class="team row bg-light">
-    <div class="col-sm-12 col-md-6 col-lg-4" data-bs-theme="dark">
-      <h1>Svetlana</h1>
+  <div class="team row d-flex justify-content-around">
+    <div class="col-sm-12 col-md-6 col-lg-4 row" data-bs-theme="dark">
+      <h4>Svetlana</h4>
+      <img src="../assets/ur10e-4x3.png" alt="">
     </div>
-    <div class="col-sm-12 col-md-6 col-lg-4">
-      <h1>Mercedes</h1>
+    <div class="col-sm-12 col-md-6 col-lg-4 row">
+      <h4>Mercedes</h4>
+      <img src="../assets/ur10e-4x3.png" alt="">
     </div>
   </div>
 </template>

@@ -14,8 +14,8 @@ services:
     tty: true
     # entrypoint: "/bin/sh"
     command: /bin/sh -c "npm run dev"
-    depends_on:
-      - mongodb   
+    # depends_on:
+    #   - mongodb   
 
   frontend:
     build:
@@ -29,9 +29,9 @@ services:
     depends_on:
       - backend
 
-  mongodb:
-    image: mongodb/mongodb-community-server
-    environment:
-      - MONGODB_INITDB_ROOT_USERNAME=user
-      - MONGODB_INITDB_ROOT_PASSWORD=pass
+  # mongodb:
+  #   image: mongodb/mongodb-community-server
+  #   environment:
+  #     - MONGODB_INITDB_ROOT_USERNAME=user
+  #     - MONGODB_INITDB_ROOT_PASSWORD=pass
 

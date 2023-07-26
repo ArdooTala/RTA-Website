@@ -2,10 +2,10 @@
 import AssembliesList from "../components/assemblies/AssembliesList.vue";
 import AssemblyCard from "../components/assemblies/AssemblyCard.vue";
 import EcosystemIcon from "../components/icons/IconEcosystem.vue";
-import AgentWorkloads from "../components/analytical/AgentWorkloads.vue";
-import HoleOffsetsScatter from "../components/analytical/HoleOffsetsScatter.vue";
-import HoleOffsetsHistogram from "../components/analytical/HoleOffsetsHistogram.vue";
-import OperationTimes from "../components/analytical/OperationTimes.vue";
+import AgentWorkloads from "../components/assemblies/analytical/AgentWorkloads.vue";
+import HoleOffsetsScatter from "../components/assemblies/analytical/HoleOffsetsScatter.vue";
+import HoleOffsetsHistogram from "../components/assemblies/analytical/HoleOffsetsHistogram.vue";
+import OperationTimes from "../components/assemblies/analytical/OperationTimes.vue";
 import { ref } from "vue";
 
 let mockData = [];

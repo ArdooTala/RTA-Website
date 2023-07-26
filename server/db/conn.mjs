@@ -5,8 +5,6 @@ dotenv.config();
 
 const connectionString = process.env.ATLAS_URI || "";
 console.log("ConnectionString: " + connectionString);
-// const connectionString =
-//   "mongodb+srv://Ardeshir:Ardoo8812@rw-cluster0.dbnjtu1.mongodb.net/?retryWrites=true&w=majority";
 const client = new MongoClient(connectionString);
 
 let conn;
