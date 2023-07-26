@@ -143,25 +143,31 @@ router.get("/hole_errors/:assembly_name", async (req, res) => {
       },
     },
     {
-      $project: {
-        assembly: 1,
-        "operations.executer": 1,
-      },
-    },
-    {
-      $unwind: {
-        path: "$operations",
-        preserveNullAndEmptyArrays: false,
-      },
-    },
-    {
-      $group: {
-        _id: "$operations.executer",
-        count: {
-          $sum: 1,
+        $match: {
+          "operations.reports.key": "hole_pos_error",
         },
       },
-    },
+      {
+        $unwind: {
+          path: "$operations",
+          preserveNullAndEmptyArrays: false,
+        },
+      },
+      {
+        $match: {
+          "operations.reports.key": "hole_pos_error",
+        },
+      },
+      {
+        $replaceWith: {
+          _id: "$_id",
+          assembly: "$assembly.assembly_name",
+          part: "$assembly.part_name",
+          report: {
+            $first: "$operations.reports.value",
+          },
+        },
+      },
   ];
 
   let collection = await db.collection("assembled_parts");

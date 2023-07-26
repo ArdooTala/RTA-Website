@@ -69,7 +69,7 @@ const holeOffsets = ref(mockData);
       <div class="h-100 border-top border-bottom">
         <div class="row m-0">
           <div class="col-lg-6 col-12">
-            <HoleOffsetsScatter class="col-3" :holeOffsets="holeOffsets" :assembly_name="assembly_url" />
+            <HoleOffsetsScatter class="col-3" :assembly_name="assembly_url" />
           </div>
           <div class="col-lg-6 col-12">
             <HoleOffsetsHistogram class="col-3" :holeOffsets="holeOffsets" />
