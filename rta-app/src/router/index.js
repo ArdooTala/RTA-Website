@@ -20,7 +20,6 @@ const router = createRouter({
     },
     {
       path: "/assemblies",
-      name: "assemblies",
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
@@ -28,6 +27,7 @@ const router = createRouter({
       children: [
         {
             path: '',
+            name: "assemblies",
             component: AssemblyDashboard,
             props: { assembly_name: '' }
         },

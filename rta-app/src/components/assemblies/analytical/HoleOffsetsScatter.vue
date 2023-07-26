@@ -19,8 +19,28 @@ import {
   LegendComponent,
 } from "echarts/components";
 import VChart, { THEME_KEY } from "vue-echarts";
-import { ref, provide } from "vue";
+import { ref, provide, onMounted, watch, computed } from "vue";
 
+const props = defineProps(["assembly_name", "holeOffsets"]);
+
+function updateData() {
+  fetch("http://localhost:5000/assemblies/hole_errors/" + props.assembly_name)
+    .then((jsonRes) => {
+      return jsonRes.json();
+    })
+    .then((jsonRes) => {
+      console.log(jsonRes);
+      return jsonRes.map((p) => {
+        return p.report.split(",").slice(0, 2).map(Number).concat(p.assembly);
+      });
+    })
+    .then((jsonRes) => {
+      option.value.series[0].data = jsonRes;
+      console.log(jsonRes);
+    });
+}
+
+// ECharts Setup
 use([
   SVGRenderer,
   ScatterChart,
@@ -28,11 +48,9 @@ use([
   TooltipComponent,
   LegendComponent,
 ]);
-
 provide(THEME_KEY, "dark");
 
-const props = defineProps(['holeOffsets'])
-
+// Get data and draw the chart
 const option = ref({
   backgroundColor: "rgba(0,0,0,0)",
   title: {
@@ -41,23 +59,33 @@ const option = ref({
   },
   tooltip: {
     trigger: "item",
-    formatter: "{a} <br/>{b} : {c} ({d}%)",
   },
   xAxis: {
     interval: 0.5,
-    boundaryGap: ['10%', '10%']
+    boundaryGap: ["10%", "10%"],
   },
   yAxis: {
     interval: 0.5,
-    boundaryGap: ['10%', '10%']
+    boundaryGap: ["10%", "10%"],
   },
   series: [
     {
       symbolSize: 10,
       data: props.holeOffsets,
       type: "scatter",
+      encode: {
+        x: 0,
+        y: 1,
+        tooltip: 2
+      }
     },
   ],
+});
+
+updateData();
+
+watch(props, () => {
+  updateData();
 });
 </script>
 
