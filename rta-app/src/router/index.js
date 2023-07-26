@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
+import AssemblyDashboard from "../components/assemblies/AssemblyDashboard.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,13 +27,13 @@ const router = createRouter({
       component: () => import("../views/AssembliesView.vue"),
       children: [
         {
-            path: '/',
-            component: () => import("../components/assemblies/AssemblyDashboard.vue"),
+            path: '',
+            component: AssemblyDashboard,
             props: { assembly_name: '' }
         },
         {
             path: ':assembly_name',
-            component: () => import("../components/assemblies/AssemblyDashboard.vue"),
+            component: AssemblyDashboard,
             props: true
         }
       ]
