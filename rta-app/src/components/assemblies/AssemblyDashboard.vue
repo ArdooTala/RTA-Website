@@ -42,9 +42,9 @@ const holeOffsets = ref(mockData);
 <template>
   <div class="row p-1">
     <div class="col-lg-8 col-md-12 p-1">
-      <div class="h-100 border-top border-bottom">
+      <div class="h-100 border-top border-bottom d-flex-column justify-content-between">
+        <h2>{{ assembly_url }}</h2>
         <AssemblyCard class="">
-          <template #icon><EcosystemIcon /></template>
           <template #start>Start Time</template>
           <template #end>End Time</template>
           <template #parts_count>23</template>
@@ -53,7 +53,6 @@ const holeOffsets = ref(mockData);
     </div>
 
     <div class="col-lg-4 col-md-4 p-1">
-        <h1>{{ assembly_url }}</h1>
       <div class="h-100 border-top border-bottom">
         <AgentWorkloads :assembly_name="assembly_url" />
       </div>
