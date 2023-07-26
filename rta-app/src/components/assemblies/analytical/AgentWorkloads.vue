@@ -19,13 +19,30 @@ import {
   LegendComponent,
 } from "echarts/components";
 import VChart, { THEME_KEY } from "vue-echarts";
-import { ref, provide, onMounted } from "vue";
+import { ref, provide, onMounted, watch, computed } from "vue";
 
+const props = defineProps(["assembly_name"]);
+
+function updateData() {
+    fetch("http://localhost:5000/assemblies/workloads/" + props.assembly_name)
+    .then((jsonRes) => {
+      return jsonRes.json();
+    })
+    .then((jsonRes) => {
+      return jsonRes.map((x) => {
+        return { name: x._id.replaceAll("/", ""), value: x.count };
+      });
+    })
+    .then((jsonRes) => {
+      option.value.series[0].data = jsonRes;
+    })
+}
+
+// ECharts Setup
 use([SVGRenderer, PieChart, TitleComponent, TooltipComponent, LegendComponent]);
-
 provide(THEME_KEY, "dark");
 
-const assemblies = ref();
+// Get data and draw the chart
 const option = ref({
   backgroundColor: "rgba(0,0,0,0)",
   title: {
@@ -50,6 +67,9 @@ const option = ref({
       itemStyle: {
         borderRadius: 5,
       },
+      data: [
+        {name: "", value: 0}
+      ],
       label: {
         show: false,
       },
@@ -64,24 +84,10 @@ const option = ref({
   ],
 });
 
-onMounted(() => {
-  assemblies.value = fetch("http://localhost:5000/assemblies/workloads")
-    .then((jsonRes) => {
-      return jsonRes.json();
-    })
-    .then((jsonRes) => {
-      return jsonRes.map((x) => {
-        return { name: x._id.replaceAll("/", ""), value: x.count };
-      });
-    })
-    .then((jsonRes) => {
-      option.value.series[0].data = jsonRes;
-      return jsonRes;
-    })
-    .then((jsonRes) => {
-      console.log(jsonRes);
-      return jsonRes;
-    });
+updateData()
+
+watch(props, () => {
+    updateData()
 });
 </script>
 

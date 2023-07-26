@@ -24,6 +24,18 @@ const router = createRouter({
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import("../views/AssembliesView.vue"),
+      children: [
+        {
+            path: '/',
+            component: () => import("../components/assemblies/AssemblyDashboard.vue"),
+            props: { assembly_name: '' }
+        },
+        {
+            path: ':assembly_name',
+            component: () => import("../components/assemblies/AssemblyDashboard.vue"),
+            props: true
+        }
+      ]
     },
     {
       path: "/materialpassports",

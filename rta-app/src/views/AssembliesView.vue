@@ -1,11 +1,7 @@
 <script setup>
 import AssembliesList from "../components/assemblies/AssembliesList.vue";
-import AssemblyCard from "../components/assemblies/AssemblyCard.vue";
-import EcosystemIcon from "../components/icons/IconEcosystem.vue";
-import AgentWorkloads from "../components/assemblies/analytical/AgentWorkloads.vue";
-import HoleOffsetsScatter from "../components/assemblies/analytical/HoleOffsetsScatter.vue";
-import HoleOffsetsHistogram from "../components/assemblies/analytical/HoleOffsetsHistogram.vue";
-import OperationTimes from "../components/assemblies/analytical/OperationTimes.vue";
+import AssemblyDashboard from "../components/assemblies/AssemblyDashboard.vue";
+import { RouterLink, RouterView } from "vue-router";
 import { ref } from "vue";
 
 let mockData = [];
@@ -30,46 +26,8 @@ const holeOffsets = ref(mockData);
     </div>
 
     <div class="col-lg-8 col-md-6 col-sm-12 bg-dark rounded-4">
-      <div class="row p-1 " >
-        <div class="col-lg-8 col-md-12 p-1 ">
-          <div class="h-100 border-top border-bottom ">
-            <AssemblyCard class="">
-              <template #icon><EcosystemIcon /></template>
-              <template #start>Start Time</template>
-              <template #end>End Time</template>
-              <template #parts_count>23</template>
-            </AssemblyCard>
-          </div>
-        </div>
-
-        <div class="col-lg-4 col-md-4 p-1">
-          <div class="h-100 border-top border-bottom">
-            <AgentWorkloads class="" />
-          </div>
-        </div>
-
-        <div class="col-lg-12 col-md-12 p-1">
-          <div class="h-100 border-top border-bottom">
-            <OperationTimes class="" :timestamps="mockDates" />
-          </div>
-        </div>
-
-        <div class="col-12 p-1">
-          <div class="h-100 border-top border-bottom">
-            <div class="row m-0">
-              <div class="col-lg-6 col-12">
-                <HoleOffsetsScatter class="col-3" :holeOffsets="holeOffsets" />
-              </div>
-              <div class="col-lg-6 col-12">
-                <HoleOffsetsHistogram
-                  class="col-3"
-                  :holeOffsets="holeOffsets"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <router-view />
+      <!-- <AssemblyDashboard :assembly_name="''"/> -->
     </div>
   </div>
   <!-- <main>

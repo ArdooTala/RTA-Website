@@ -21,9 +21,49 @@ router.get("/", async (req, res) => {
   res.send(aggRes).status(200);
 });
 
-// Get the workloads by count
+// Get all the workloads by count
 router.get("/workloads", async (req, res) => {
   const pipeline = [
+    {
+      $project: {
+        assembly: 1,
+        "operations.executer": 1,
+      },
+    },
+    {
+      $unwind: {
+        path: "$operations",
+        preserveNullAndEmptyArrays: false,
+      },
+    },
+    {
+      $group: {
+        _id: "$operations.executer",
+        count: {
+          $sum: 1,
+        },
+      },
+    },
+  ];
+
+  let collection = await db.collection("assembled_parts");
+  const aggCursor = collection.aggregate(pipeline);
+  // for await (const doc of aggCursor) {
+  //   console.log(doc);
+  // }
+  let aggRes = await aggCursor.toArray();
+  console.log(aggRes);
+  res.send(aggRes).status(200);
+});
+
+// Get the assembly workloads by count
+router.get("/workloads/:assembly_name", async (req, res) => {
+  const pipeline = [
+    {
+      $match: {
+        "assembly.assembly_name": req.params.assembly_name,
+      },
+    },
     {
       $project: {
         assembly: 1,

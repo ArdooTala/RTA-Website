@@ -1,6 +1,7 @@
 <script>
 import AssemblyCard from "./AssemblyCard.vue";
 import EcosystemIcon from "../icons/IconEcosystem.vue";
+import { RouterLink, RouterView } from "vue-router";
 
 export default {
   data() {
@@ -15,7 +16,7 @@ export default {
       })
       .then((jsonRes) => {
         this.assemblies = jsonRes;
-        console.log(jsonRes);
+        // console.log(jsonRes);
       });
   },
   components: {
@@ -69,7 +70,7 @@ export default {
             <template #parts_count>{{ ass.count }}</template>
           </AssemblyCard>
 
-          <button type="button" class="btn btn-dark border">Open in Dashboard</button>
+          <router-link :to="'/assemblies/' + ass._id" type="button" class="btn btn-dark border">Open in Dashboard</router-link>
         </div>
       </div>
     </div>
