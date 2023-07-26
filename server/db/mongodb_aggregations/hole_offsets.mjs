@@ -45,3 +45,34 @@ const coll = client.db("test_reconwood_2").collection("assembled_parts");
 const cursor = coll.aggregate(agg);
 const result = await cursor.toArray();
 await client.close();
+
+//////////////////////////////////////////////////////////////////////////////
+
+const pipeline = [
+  {
+    $match: {
+      "operations.reports.key": "hole_pos_error",
+    },
+  },
+  {
+    $unwind: {
+      path: "$operations",
+      preserveNullAndEmptyArrays: false,
+    },
+  },
+  {
+    $match: {
+      "operations.reports.key": "hole_pos_error",
+    },
+  },
+  {
+    $replaceWith: {
+      _id: "$_id",
+      assembly: "$assembly.assembly_name",
+      part: "$assembly.part_name",
+      report: {
+        $first: "$operations.reports.value",
+      },
+    },
+  },
+];
