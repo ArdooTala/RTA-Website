@@ -21,7 +21,7 @@ import {
 import VChart, { THEME_KEY } from "vue-echarts";
 import { ref, provide, onMounted, watch, computed } from "vue";
 
-const props = defineProps(["assembly_name", "holeOffsets"]);
+const props = defineProps(["assembly_name"]);
 
 function updateData() {
   fetch("http://localhost:5000/assemblies/hole_errors/" + props.assembly_name)
@@ -29,14 +29,14 @@ function updateData() {
       return jsonRes.json();
     })
     .then((jsonRes) => {
-      console.log(jsonRes);
+    //   console.log(jsonRes);
       return jsonRes.map((p) => {
         return p.report.split(",").slice(0, 2).map(Number).concat(p.assembly);
       });
     })
     .then((jsonRes) => {
       option.value.series[0].data = jsonRes;
-      console.log(jsonRes);
+    //   console.log(jsonRes);
     });
 }
 
@@ -71,7 +71,7 @@ const option = ref({
   series: [
     {
       symbolSize: 10,
-      data: props.holeOffsets,
+      data: [[0,0,0]],
       type: "scatter",
       encode: {
         x: 0,
