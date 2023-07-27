@@ -3,7 +3,7 @@ import { RouterLink, RouterView } from "vue-router";
 </script>
 
 <template>
-  <div class="row bg_image" style="background-color: black; min-height: 100%">
+  <div class="row bg_image fw-light " style="background-color: black; min-height: 100%">
     <div class="col-12 col-lg-6">
       <div
         class="d-flex align-items-end justify-content-center"

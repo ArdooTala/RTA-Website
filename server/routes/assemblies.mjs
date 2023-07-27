@@ -96,7 +96,7 @@ router.get("/workloads/:assembly_name", async (req, res) => {
   res.send(aggRes).status(200);
 });
 
-// Get all the assembly hole errors
+// Get all the assemblies hole errors
 router.get("/hole_errors/", async (req, res) => {
   const pipeline = [
     {
@@ -179,6 +179,10 @@ router.get("/hole_errors/:assembly_name", async (req, res) => {
   console.log(aggRes);
   res.send(aggRes).status(200);
 });
+
+// Get all the assemblies success rate
+
+// Get the assembly success rate
 
 // Get a single assembly by name
 router.get("/:name", async (req, res) => {
