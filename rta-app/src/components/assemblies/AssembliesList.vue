@@ -27,7 +27,6 @@ export default {
 </script>
 
 <template>
-    
   <div class="">
     <button
       class="btn btn-dark dropdown-toggle border w-100"

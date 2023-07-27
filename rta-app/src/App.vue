@@ -28,7 +28,7 @@ import { RouterLink, RouterView } from "vue-router";
               <!-- <a class="nav-link active" aria-current="page" href="#">Home</a> -->
             </li>
             <li class="nav-item me-2">
-              <RouterLink to="/projects" class="nav-link">PROJECTS</RouterLink>
+              <RouterLink to="/projects" class="nav-link disabled">PROJECTS</RouterLink>
             </li>
             <li class="nav-item me-2">
               <RouterLink to="/assemblies" class="nav-link"
@@ -36,7 +36,7 @@ import { RouterLink, RouterView } from "vue-router";
               >
             </li>
             <li class="nav-item me-2">
-              <RouterLink to="/materialpassports" class="nav-link"
+              <RouterLink to="/materialpassports" class="nav-link disabled"
                 >MATERIALS</RouterLink
               >
             </li>
