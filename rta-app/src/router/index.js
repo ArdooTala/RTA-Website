@@ -7,8 +7,17 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      name: "home",
       component: HomeView,
+      children: [
+        {
+            path: 'about',
+            component: () => import("../views/AboutView.vue"),
+        },
+        {
+            path: 'team',
+            component: () => import("../views/TeamView.vue"),
+        }
+      ]
     },
     {
       path: "/projects",
@@ -46,22 +55,22 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import("../views/MaterialPassportsView.vue"),
     },
-    {
-      path: "/about",
-      name: "about",
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import("../views/AboutView.vue"),
-    },
-    {
-      path: "/team",
-      name: "team",
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import("../views/TeamView.vue"),
-    },
+    // {
+    //   path: "/about",
+    //   name: "about",
+    //   // route level code-splitting
+    //   // this generates a separate chunk (About.[hash].js) for this route
+    //   // which is lazy-loaded when the route is visited.
+    //   component: () => import("../views/AboutView.vue"),
+    // },
+    // {
+    //   path: "/team",
+    //   name: "team",
+    //   // route level code-splitting
+    //   // this generates a separate chunk (About.[hash].js) for this route
+    //   // which is lazy-loaded when the route is visited.
+    //   component: () => import("../views/TeamView.vue"),
+    // },
   ],
 });
 

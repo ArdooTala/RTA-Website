@@ -34,27 +34,16 @@ export default {
   >
     <div v-for="ass in assemblies" class="accordion-item p-2 border-bottom">
       <div class="accordion-header justify-content-between">
-        <div class="btn-group w-100 justify-content-between">
-          <button
-            type="button"
-            class="btn w-75 me-auto d-flex align-items-center"
-          >
-            <EcosystemIcon class="me-2" />
-            <h5 class="p-2 m-0 me-auto">{{ ass._id }}</h5>
-            <span class="badge rounded-pill text-bg-light">{{
-              ass.count
-            }}</span>
-          </button>
-
-          <button
-            class="btn dropdown-toggle dropdown-toggle-split ms-1"
-            type="button"
-            data-bs-toggle="collapse"
-            :data-bs-target="'#' + ass._id"
-            aria-expanded="false"
-            :aria-controls="ass._id"
-          ></button>
-        </div>
+        <button
+          type="button"
+          class="btn w-100 me-auto d-flex align-items-center"
+          data-bs-toggle="collapse"
+          :data-bs-target="'#' + ass._id"
+        >
+          <!-- <EcosystemIcon class="me-2" /> -->
+          <h5 class="p-2 m-0 me-auto">{{ ass._id }}</h5>
+          <span class="badge rounded-pill text-bg-light">{{ ass.count }}</span>
+        </button>
       </div>
 
       <div
@@ -70,7 +59,12 @@ export default {
             <template #parts_count>{{ ass.count }}</template>
           </AssemblyCard>
 
-          <router-link :to="'/assemblies/' + ass._id" type="button" class="btn btn-dark border">Open in Dashboard</router-link>
+          <router-link
+            :to="'/assemblies/' + ass._id"
+            type="button"
+            class="btn btn-dark border"
+            >Open in Dashboard</router-link
+          >
         </div>
       </div>
     </div>

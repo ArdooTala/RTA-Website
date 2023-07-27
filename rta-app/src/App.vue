@@ -3,12 +3,12 @@ import { RouterLink, RouterView } from "vue-router";
 </script>
 
 <template>
-  <div class="bg-dark background">
+  <div class="bg-dark background d-flex flex-column">
     <nav
       class="navbar navbar-expand-lg bg-dark border-bottom border-bottom-light"
       data-bs-theme="dark"
     >
-      <div class="container">
+      <div class="container-fluid ">
         <h1 class="navbar-brand">RECONWOOD</h1>
         <button
           class="navbar-toggler"
@@ -66,7 +66,7 @@ import { RouterLink, RouterView } from "vue-router";
       </div>
     </nav>
 
-    <div class="container" data-bs-theme="dark">
+    <div class="container-fluid flex-fill" data-bs-theme="dark">
       <RouterView class="" />
     </div>
   </div>
@@ -77,6 +77,7 @@ import { RouterLink, RouterView } from "vue-router";
   height: 100vh;
   width: 100vw;
 }
+
 /*
 header {
   line-height: 1.5;

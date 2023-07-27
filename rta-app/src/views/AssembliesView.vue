@@ -21,7 +21,7 @@ const holeOffsets = ref(mockData);
 
 <template>
   <div class="row mt-2">
-    <div class="col-lg-4 col-md-6 col-sm-12">
+    <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3 ">
       <AssembliesList />
     </div>
 
