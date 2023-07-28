@@ -32,7 +32,7 @@ for (let i = 0; i < 23; i++) {
 </script>
 
 <template>
-  <div class="row h-100">
+  <div class="row h-100 mt-1">
     <div class="col-12" style="height: 33%">
       <div class="row h-100">
         <div class="col-md-12 col-lg-8 p-1">

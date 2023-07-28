@@ -27,16 +27,14 @@ export default {
 </script>
 
 <template>
-  <div class="">
     <button
-      class="btn btn-dark dropdown-toggle border w-100"
+      class="btn btn-dark dropdown-toggle border w-100 mt-2"
       type="button"
       data-bs-toggle="collapse"
       data-bs-target="#assembliesCollapseTarget"
     >
       ASSEMBLIES
     </button>
-  </div>
   <div class="collapse show" id="assembliesCollapseTarget">
     <div
       class="accordion accordion-flush rounded-4 overflow-hidden"
