@@ -27,7 +27,7 @@ export default {
 </script>
 
 <template>
-  <div class="mt-2">
+  <div class="">
     <button
       class="btn btn-dark dropdown-toggle border w-100 mt-2 d-block d-md-none"
       type="button"

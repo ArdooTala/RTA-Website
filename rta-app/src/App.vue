@@ -3,7 +3,7 @@ import { RouterLink, RouterView } from "vue-router";
 </script>
 
 <template>
-  <div class="bg-dark background d-flex flex-column">
+  <div class="bg-dark background d-flex flex-column" style="padding: 1em; padding-top: 0px;">
     <nav
       class="navbar navbar-expand-lg bg-dark border-bottom border-bottom-light"
       data-bs-theme="dark"
