@@ -1,10 +1,10 @@
 <template>
-    <v-chart class="chart" :option="option" autoresize />
+  <v-chart class="chart" :option="option" autoresize />
 </template>
 
 <script setup>
 import { use } from "echarts/core";
-import { SVGRenderer } from "echarts/renderers";
+import { SVGRenderer, CanvasRenderer } from "echarts/renderers";
 import { BarChart, ScatterChart } from "echarts/charts";
 import {
   TitleComponent,
@@ -53,7 +53,7 @@ const holeDist = computed(() => {
 
 // ECharts Setup
 use([
-  SVGRenderer,
+  CanvasRenderer,
   ScatterChart,
   BarChart,
   TitleComponent,

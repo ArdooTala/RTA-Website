@@ -47,7 +47,7 @@ const option = ref({
     formatter: "{a} <br/>{b} : {c} ({d}%)",
   },
   legend: {
-    orient: "horizontal",
+    orient: "vertical",
     left: "left",
     top: "bottom",
   },

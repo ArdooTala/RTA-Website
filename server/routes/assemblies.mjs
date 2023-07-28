@@ -143,31 +143,31 @@ router.get("/hole_errors/:assembly_name", async (req, res) => {
       },
     },
     {
-        $match: {
-          "operations.reports.key": "hole_pos_error",
+      $match: {
+        "operations.reports.key": "hole_pos_error",
+      },
+    },
+    {
+      $unwind: {
+        path: "$operations",
+        preserveNullAndEmptyArrays: false,
+      },
+    },
+    {
+      $match: {
+        "operations.reports.key": "hole_pos_error",
+      },
+    },
+    {
+      $replaceWith: {
+        _id: "$_id",
+        assembly: "$assembly.assembly_name",
+        part: "$assembly.part_name",
+        report: {
+          $first: "$operations.reports.value",
         },
       },
-      {
-        $unwind: {
-          path: "$operations",
-          preserveNullAndEmptyArrays: false,
-        },
-      },
-      {
-        $match: {
-          "operations.reports.key": "hole_pos_error",
-        },
-      },
-      {
-        $replaceWith: {
-          _id: "$_id",
-          assembly: "$assembly.assembly_name",
-          part: "$assembly.part_name",
-          report: {
-            $first: "$operations.reports.value",
-          },
-        },
-      },
+    },
   ];
 
   let collection = await db.collection("assembled_parts");
@@ -180,9 +180,297 @@ router.get("/hole_errors/:assembly_name", async (req, res) => {
   res.send(aggRes).status(200);
 });
 
-// Get all the assemblies success rate
+// Get all the operations success rate
+router.get("/success_rate/", async (req, res) => {
+  const pipeline = [
+    {
+      $project: {
+        "operations.reports": 0,
+        "operations.timestamp": 0,
+        "operations.end_time": 0,
+        "operations.start_time": 0,
+      },
+    },
+    {
+      $unwind: {
+        path: "$operations",
+        includeArrayIndex: "op_index",
+        preserveNullAndEmptyArrays: false,
+      },
+    },
+    {
+      $replaceWith: "$operations",
+    },
+    {
+      $match: {
+        result: {
+          $exists: true,
+          $in: ["sm_aborted", "sm_succeeded"],
+        },
+      },
+    },
+    {
+      $group: {
+        _id: "$type",
+        results: {
+          $push: "$result",
+        },
+      },
+    },
+    {
+      $project: {
+        ops_count: {
+          $size: "$results",
+        },
+        success_count: {
+          $size: {
+            $filter: {
+              input: "$results",
+              as: "r",
+              cond: {
+                $eq: ["$$r", "sm_succeeded"],
+              },
+            },
+          },
+        },
+        failure_count: {
+          $size: {
+            $filter: {
+              input: "$results",
+              as: "r",
+              cond: {
+                $eq: ["$$r", "sm_aborted"],
+              },
+            },
+          },
+        },
+      },
+    },
+  ];
 
-// Get the assembly success rate
+  let collection = await db.collection("assembled_parts");
+  const aggCursor = collection.aggregate(pipeline);
+  let aggRes = await aggCursor.toArray();
+  console.log(aggRes);
+  res.send(aggRes).status(200);
+});
+
+// Get the assembly operations success rate
+router.get("/success_rate/:assembly_name", async (req, res) => {
+  const pipeline = [
+    {
+      $match: {
+        "assembly.assembly_name": req.params.assembly_name,
+      },
+    },
+    {
+      $project: {
+        "operations.reports": 0,
+        "operations.timestamp": 0,
+        "operations.end_time": 0,
+        "operations.start_time": 0,
+      },
+    },
+    {
+      $unwind: {
+        path: "$operations",
+        includeArrayIndex: "op_index",
+        preserveNullAndEmptyArrays: false,
+      },
+    },
+    {
+      $replaceWith: "$operations",
+    },
+    {
+      $match: {
+        result: {
+          $exists: true,
+          $in: ["sm_aborted", "sm_succeeded"],
+        },
+      },
+    },
+    {
+      $group: {
+        _id: "$type",
+        results: {
+          $push: "$result",
+        },
+      },
+    },
+    {
+      $project: {
+        ops_count: {
+          $size: "$results",
+        },
+        success_count: {
+          $size: {
+            $filter: {
+              input: "$results",
+              as: "r",
+              cond: {
+                $eq: ["$$r", "sm_succeeded"],
+              },
+            },
+          },
+        },
+        failure_count: {
+          $size: {
+            $filter: {
+              input: "$results",
+              as: "r",
+              cond: {
+                $eq: ["$$r", "sm_aborted"],
+              },
+            },
+          },
+        },
+      },
+    },
+  ];
+
+  let collection = await db.collection("assembled_parts");
+  const aggCursor = collection.aggregate(pipeline);
+  let aggRes = await aggCursor.toArray();
+  console.log(aggRes);
+  res.send(aggRes).status(200);
+});
+
+// Get all the parts success rate
+router.get("/parts_success_rate/", async (req, res) => {
+  const pipeline = [
+    {
+      $project: {
+        assembly: 1,
+        "operations.result": 1,
+        succeeded: {
+          $allElementsTrue: {
+            $map: {
+              input: "$operations",
+              as: "op",
+              in: {
+                $eq: ["$$op.result", "sm_succeeded"],
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      $group: {
+        _id: "$assembly.assembly_name",
+        results: {
+          $push: "$succeeded",
+        },
+      },
+    },
+    {
+      $project: {
+        ops_count: {
+          $size: "$results",
+        },
+        success_count: {
+          $size: {
+            $filter: {
+              input: "$results",
+              as: "r",
+              cond: {
+                $eq: ["$$r", true],
+              },
+            },
+          },
+        },
+        failure_count: {
+          $size: {
+            $filter: {
+              input: "$results",
+              as: "r",
+              cond: {
+                $eq: ["$$r", false],
+              },
+            },
+          },
+        },
+      },
+    },
+  ];
+
+  let collection = await db.collection("assembled_parts");
+  const aggCursor = collection.aggregate(pipeline);
+  let aggRes = await aggCursor.toArray();
+  console.log(aggRes);
+  res.send(aggRes).status(200);
+});
+
+// Get the assembly parts success rate
+router.get("/parts_success_rate/:assembly_name", async (req, res) => {
+  const pipeline = [
+    {
+      $match: {
+        "assembly.assembly_name": req.params.assembly_name,
+      },
+    },
+    {
+      $project: {
+        assembly: 1,
+        "operations.result": 1,
+        succeeded: {
+          $allElementsTrue: {
+            $map: {
+              input: "$operations",
+              as: "op",
+              in: {
+                $eq: ["$$op.result", "sm_succeeded"],
+              },
+            },
+          },
+        },
+      },
+    },
+    {
+      $group: {
+        _id: "$assembly.assembly_name",
+        results: {
+          $push: "$succeeded",
+        },
+      },
+    },
+    {
+      $project: {
+        ops_count: {
+          $size: "$results",
+        },
+        success_count: {
+          $size: {
+            $filter: {
+              input: "$results",
+              as: "r",
+              cond: {
+                $eq: ["$$r", true],
+              },
+            },
+          },
+        },
+        failure_count: {
+          $size: {
+            $filter: {
+              input: "$results",
+              as: "r",
+              cond: {
+                $eq: ["$$r", false],
+              },
+            },
+          },
+        },
+      },
+    },
+  ];
+
+  let collection = await db.collection("assembled_parts");
+  const aggCursor = collection.aggregate(pipeline);
+  let aggRes = await aggCursor.toArray();
+  console.log(aggRes);
+  res.send(aggRes).status(200);
+});
 
 // Get a single assembly by name
 router.get("/:name", async (req, res) => {
