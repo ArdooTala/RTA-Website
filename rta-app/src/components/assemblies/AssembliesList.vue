@@ -64,7 +64,7 @@ export default {
           class="accordion-collapse collapse bg-transparent"
           data-bs-parent="#assembliesAccordion"
         >
-          <div class="accordion-body bg-transparent">
+          <div class="accordion-body">
             <AssemblyCard class="">
               <template #icon><EcosystemIcon /></template>
               <template #start>{{ ass._id }}</template>
@@ -75,7 +75,7 @@ export default {
             <router-link
               :to="'/assemblies/' + ass._id"
               type="button"
-              class="btn btn-dark border"
+              class="btn btn-dark border w-100 mt-4"
               >Open in Dashboard</router-link
             >
           </div>

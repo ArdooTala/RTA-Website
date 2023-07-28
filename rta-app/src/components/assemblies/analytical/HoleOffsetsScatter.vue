@@ -1,12 +1,5 @@
 <template>
-  <div
-    class="ratio ratio-1x1 rounded-4 bg-dark overflow-hidden"
-    data-bs-theme="dark"
-  >
-    <div class="p-2">
-      <v-chart class="chart" :option="option" autoresize />
-    </div>
-  </div>
+    <v-chart class="chart" :option="option" autoresize />
 </template>
 
 <script setup>
@@ -29,14 +22,14 @@ function updateData() {
       return jsonRes.json();
     })
     .then((jsonRes) => {
-    //   console.log(jsonRes);
+      //   console.log(jsonRes);
       return jsonRes.map((p) => {
-        return p.report.split(",").slice(0, 2).map(Number).concat(p.assembly);
+        return p.report.split(",").slice(0, 2).map(Number).map(x => x*1000).concat(p.assembly);
       });
     })
     .then((jsonRes) => {
       option.value.series[0].data = jsonRes;
-    //   console.log(jsonRes);
+      //   console.log(jsonRes);
     });
 }
 
@@ -71,13 +64,13 @@ const option = ref({
   series: [
     {
       symbolSize: 10,
-      data: [[0,0,0]],
+      data: [[0, 0, 0]],
       type: "scatter",
       encode: {
         x: 0,
         y: 1,
-        tooltip: 2
-      }
+        tooltip: 2,
+      },
     },
   ],
 });

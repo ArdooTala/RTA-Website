@@ -16,8 +16,8 @@
         </p>
       </div>
       
-      <div class="col-3"><p>Progress</p></div>
-      <div class="progress col-9" role="progressbar" aria-label="Basic" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
+      <div class="col-12"><p>Progress</p></div>
+      <div class="progress col-12 " role="progressbar" aria-label="Basic" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100">
         <div class="progress-bar w-75">75%</div>
       </div>
     </div>

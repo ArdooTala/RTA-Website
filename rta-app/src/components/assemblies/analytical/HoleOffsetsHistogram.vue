@@ -1,12 +1,5 @@
 <template>
-  <div
-    class="ratio ratio-1x1 rounded-4 bg-dark overflow-hidden"
-    data-bs-theme="dark"
-  >
-    <div class="p-2">
-      <v-chart class="chart" :option="option" autoresize />
-    </div>
-  </div>
+    <v-chart class="chart" :option="option" autoresize />
 </template>
 
 <script setup>
@@ -30,19 +23,21 @@ function updateData() {
       return jsonRes.json();
     })
     .then((jsonRes) => {
-    //   console.log(jsonRes);
+      //   console.log(jsonRes);
       return jsonRes.map((p) => {
         return p.report.split(",").slice(0, 2).map(Number);
       });
     })
     .then((jsonRes) => {
       hole_errors.value = jsonRes;
-    //   console.log(jsonRes);
+      //   console.log(jsonRes);
     });
 }
 
 const holeDist = computed(() => {
-  let dists = hole_errors.value.map((x) => Math.sqrt(x[0] * x[0] + x[1] * x[1]) * 1000 );
+  let dists = hole_errors.value.map(
+    (x) => Math.sqrt(x[0] * x[0] + x[1] * x[1]) * 1000
+  );
   let grouped = dists.reduce(
     (entryMap, e) =>
       entryMap.set(Math.round(e), [

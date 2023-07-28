@@ -1,12 +1,5 @@
 <template>
-  <div
-    class="ratio ratio-16x9 rounded-4 h-100 bg-dark overflow-hidden"
-    data-bs-theme="dark"
-  >
-    <div class="p-2 h-100">
       <v-chart class="chart" :option="option" autoresize />
-    </div>
-  </div>
 </template>
 
 <script setup>

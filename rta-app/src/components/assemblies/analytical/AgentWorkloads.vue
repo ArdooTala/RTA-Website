@@ -1,12 +1,5 @@
 <template>
-  <div
-    class="ratio ratio-1x1 rounded-4 bg-dark overflow-hidden"
-    data-bs-theme="dark"
-  >
-    <div class="p-2">
-      <v-chart class="chart" :option="option" autoresize />
-    </div>
-  </div>
+    <v-chart class="chart" :option="option" autoresize />
 </template>
 
 <script setup>
@@ -24,7 +17,7 @@ import { ref, provide, onMounted, watch, computed } from "vue";
 const props = defineProps(["assembly_name"]);
 
 function updateData() {
-    fetch("http://localhost:5000/assemblies/workloads/" + props.assembly_name)
+  fetch("http://localhost:5000/assemblies/workloads/" + props.assembly_name)
     .then((jsonRes) => {
       return jsonRes.json();
     })
@@ -35,7 +28,7 @@ function updateData() {
     })
     .then((jsonRes) => {
       option.value.series[0].data = jsonRes;
-    })
+    });
 }
 
 // ECharts Setup
@@ -67,9 +60,7 @@ const option = ref({
       itemStyle: {
         borderRadius: 5,
       },
-      data: [
-        {name: "", value: 0}
-      ],
+      data: [{ name: "", value: 0 }],
       label: {
         show: false,
       },
@@ -84,10 +75,10 @@ const option = ref({
   ],
 });
 
-updateData()
+updateData();
 
 watch(props, () => {
-    updateData()
+  updateData();
 });
 </script>
 

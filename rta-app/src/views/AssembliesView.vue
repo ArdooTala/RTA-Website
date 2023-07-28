@@ -20,16 +20,13 @@ const holeOffsets = ref(mockData);
 </script>
 
 <template>
-  <div class="row mt-2">
+  <div class="row h-100">
     <div class="col-12 col-md-6 col-lg-4 col-xl-3 ">
       <AssembliesList />
     </div>
 
     <div class="col-12 col-md-6 col-lg-8 col-xl-9">
       <router-view />
-      <!-- <AssemblyDashboard :assembly_name="''"/> -->
     </div>
   </div>
-  <!-- <main>
-  </main> -->
 </template>
