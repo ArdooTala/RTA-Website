@@ -27,19 +27,18 @@ export default {
 </script>
 
 <template>
-    <button
-      class="btn btn-dark dropdown-toggle border w-100 mt-2 d-block d-md-none"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#assembliesCollapseTarget"
-    >
-      ASSEMBLIES
-    </button>
+  <button
+    class="btn btn-dark dropdown-toggle border w-100 mt-2 d-block d-md-none"
+    type="button"
+    data-bs-toggle="collapse"
+    data-bs-target="#assembliesCollapseTarget"
+  >
+    ASSEMBLIES
+  </button>
   <div class="collapse show" id="assembliesCollapseTarget">
     <div
       class="accordion accordion-flush rounded-4 overflow-hidden"
       id="assembliesAccordion"
-      data-bs-theme="dark"
     >
       <div v-for="ass in assemblies" class="accordion-item p-2 border-bottom">
         <div class="accordion-header justify-content-between">

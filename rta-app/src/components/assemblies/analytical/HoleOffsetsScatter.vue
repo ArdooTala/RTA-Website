@@ -4,7 +4,7 @@
 
 <script setup>
 import { use } from "echarts/core";
-import { SVGRenderer } from "echarts/renderers";
+import { SVGRenderer, CanvasRenderer } from "echarts/renderers";
 import { ScatterChart } from "echarts/charts";
 import {
   TitleComponent,
@@ -35,7 +35,7 @@ function updateData() {
 
 // ECharts Setup
 use([
-  SVGRenderer,
+  CanvasRenderer,
   ScatterChart,
   TitleComponent,
   TooltipComponent,
