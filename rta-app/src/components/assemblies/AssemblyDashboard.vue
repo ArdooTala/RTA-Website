@@ -33,7 +33,7 @@ for (let i = 0; i < 23; i++) {
 
 <template>
   <div class="row h-100 mt-1 d-block d-lg-flex flex-column justify-content-around">
-    <div class="col-12 p-1 row" style="flex-basis: 0%; flex-grow: 1">
+    <div class="col-12 p-1 row" style="flex-basis: auto; flex-grow: 0">
       <div class="col-md-12 col-lg-8">
         <div class="border-top border-bottom p-1 h-100 d-flex flex-column">
           <h2 class="mb-auto">{{ assembly_url }}</h2>
