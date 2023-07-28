@@ -28,7 +28,7 @@ export default {
 
 <template>
     <button
-      class="btn btn-dark dropdown-toggle border w-100 mt-2"
+      class="btn btn-dark dropdown-toggle border w-100 mt-2 d-block d-md-none"
       type="button"
       data-bs-toggle="collapse"
       data-bs-target="#assembliesCollapseTarget"
