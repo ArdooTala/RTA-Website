@@ -91,7 +91,7 @@ const option = ref({
     splitLine: {
       show: true,
     },
-    splitNumber: 20,
+    // splitNumber: 20,
     //   boundaryGap: ["10%", "10%"],
   },
   tooltip: {

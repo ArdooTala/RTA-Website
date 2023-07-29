@@ -54,11 +54,11 @@ const option = ref({
     trigger: "item",
   },
   xAxis: {
-    interval: 0.5,
+    // interval: 0.5,
     boundaryGap: ["10%", "10%"],
   },
   yAxis: {
-    interval: 0.5,
+    // interval: 0.5,
     boundaryGap: ["10%", "10%"],
   },
   series: [
