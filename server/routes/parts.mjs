@@ -6,14 +6,14 @@ const router = express.Router();
 
 // Get a list of all the parts.
 router.get("/", async (req, res) => {
-  let collection = await db.collection("assembled_parts");
+  let collection = await db.collection("assembly_ops");
   let results = await collection.find({}).toArray();
   res.send(results).status(200);
 });
 
 // Get a single part by id
 router.get("/:id", async (req, res) => {
-  let collection = await db.collection("assembled_parts");
+  let collection = await db.collection("assembly_ops");
   let query = { _id: new ObjectId(req.params.id) };
   let result = await collection.findOne(query);
 
@@ -30,7 +30,7 @@ router.post("/", async (req, res) => {
   // };
   let newDocument = req.body;
   console.log(newDocument);
-  let collection = await db.collection("assembled_parts");
+  let collection = await db.collection("assembly_ops");
   let result = await collection.insertOne(newDocument);
   res.send(result).status(204);
 });

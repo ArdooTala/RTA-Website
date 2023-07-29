@@ -41,7 +41,7 @@ const client = await MongoClient.connect("", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
-const coll = client.db("test_reconwood_2").collection("assembled_parts");
+const coll = client.db("test_reconwood_2").collection("assembly_ops");
 const cursor = coll.aggregate(agg);
 const result = await cursor.toArray();
 await client.close();

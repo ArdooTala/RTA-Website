@@ -11,7 +11,7 @@ router.get("/", async (req, res) => {
     { $group: { _id: "$assembly.assembly_name", count: { $sum: 1 } } },
   ];
 
-  let collection = await db.collection("assembled_parts");
+  let collection = await db.collection("assembly_ops");
   const aggCursor = collection.aggregate(pipeline);
   // for await (const doc of aggCursor) {
   //   console.log(doc);
@@ -46,7 +46,7 @@ router.get("/workloads", async (req, res) => {
     },
   ];
 
-  let collection = await db.collection("assembled_parts");
+  let collection = await db.collection("assembly_ops");
   const aggCursor = collection.aggregate(pipeline);
   // for await (const doc of aggCursor) {
   //   console.log(doc);
@@ -86,7 +86,7 @@ router.get("/workloads/:assembly_name", async (req, res) => {
     },
   ];
 
-  let collection = await db.collection("assembled_parts");
+  let collection = await db.collection("assembly_ops");
   const aggCursor = collection.aggregate(pipeline);
   // for await (const doc of aggCursor) {
   //   console.log(doc);
@@ -127,7 +127,7 @@ router.get("/hole_errors/", async (req, res) => {
     },
   ];
 
-  let collection = await db.collection("assembled_parts");
+  let collection = await db.collection("assembly_ops");
   const aggCursor = collection.aggregate(pipeline);
   let aggRes = await aggCursor.toArray();
   console.log(aggRes);
@@ -170,7 +170,7 @@ router.get("/hole_errors/:assembly_name", async (req, res) => {
     },
   ];
 
-  let collection = await db.collection("assembled_parts");
+  let collection = await db.collection("assembly_ops");
   const aggCursor = collection.aggregate(pipeline);
   // for await (const doc of aggCursor) {
   //   console.log(doc);
@@ -248,7 +248,7 @@ router.get("/success_rate/", async (req, res) => {
     },
   ];
 
-  let collection = await db.collection("assembled_parts");
+  let collection = await db.collection("assembly_ops");
   const aggCursor = collection.aggregate(pipeline);
   let aggRes = await aggCursor.toArray();
   console.log(aggRes);
@@ -328,7 +328,7 @@ router.get("/success_rate/:assembly_name", async (req, res) => {
     },
   ];
 
-  let collection = await db.collection("assembled_parts");
+  let collection = await db.collection("assembly_ops");
   const aggCursor = collection.aggregate(pipeline);
   let aggRes = await aggCursor.toArray();
   console.log(aggRes);
@@ -392,9 +392,23 @@ router.get("/parts_success_rate/", async (req, res) => {
         },
       },
     },
+    {
+      $group: {
+        _id: null,
+        ops_count: {
+          $sum: "$ops_count",
+        },
+        success_count: {
+          $sum: "$success_count",
+        },
+        failure_count: {
+          $sum: "$failure_count",
+        },
+      },
+    },
   ];
 
-  let collection = await db.collection("assembled_parts");
+  let collection = await db.collection("assembly_ops");
   const aggCursor = collection.aggregate(pipeline);
   let aggRes = await aggCursor.toArray();
   console.log(aggRes);
@@ -463,9 +477,23 @@ router.get("/parts_success_rate/:assembly_name", async (req, res) => {
         },
       },
     },
+    {
+      $group: {
+        _id: null,
+        ops_count: {
+          $sum: "$ops_count",
+        },
+        success_count: {
+          $sum: "$success_count",
+        },
+        failure_count: {
+          $sum: "$failure_count",
+        },
+      },
+    },
   ];
 
-  let collection = await db.collection("assembled_parts");
+  let collection = await db.collection("assembly_ops");
   const aggCursor = collection.aggregate(pipeline);
   let aggRes = await aggCursor.toArray();
   console.log(aggRes);
@@ -474,7 +502,7 @@ router.get("/parts_success_rate/:assembly_name", async (req, res) => {
 
 // Get a single assembly by name
 router.get("/:name", async (req, res) => {
-  let collection = await db.collection("assembled_parts");
+  let collection = await db.collection("assembly_ops");
   let query = { "assembly.assembly_name": req.params.name };
   let result = await collection.findOne(query);
 
@@ -483,3 +511,74 @@ router.get("/:name", async (req, res) => {
 });
 
 export default router;
+
+// [
+//   {
+//     $project: {
+//       assembly: 1,
+//       "operations.result": 1,
+//       succeeded: {
+//         $allElementsTrue: {
+//           $map: {
+//             input: "$operations",
+//             as: "op",
+//             in: {
+//               $eq: ["$$op.result", "sm_succeeded"],
+//             },
+//           },
+//         },
+//       },
+//     },
+//   },
+//   {
+//     $group: {
+//       _id: "$assembly.assembly_name",
+//       results: {
+//         $push: "$succeeded",
+//       },
+//     },
+//   },
+//   {
+//     $project: {
+//       ops_count: {
+//         $size: "$results",
+//       },
+//       success_count: {
+//         $size: {
+//           $filter: {
+//             input: "$results",
+//             as: "r",
+//             cond: {
+//               $eq: ["$$r", true],
+//             },
+//           },
+//         },
+//       },
+//       failure_count: {
+//         $size: {
+//           $filter: {
+//             input: "$results",
+//             as: "r",
+//             cond: {
+//               $eq: ["$$r", false],
+//             },
+//           },
+//         },
+//       },
+//     },
+//   },
+//   {
+//     $group: {
+//       _id: null,
+//       ops_count: {
+//         $sum: "$ops_count",
+//       },
+//       success_count: {
+//         $sum: "$success_count",
+//       },
+//       failure_count: {
+//         $sum: "$failure_count",
+//       },
+//     },
+//   },
+// ];
