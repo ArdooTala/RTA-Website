@@ -14,9 +14,6 @@ const route = useRoute();
 const props = defineProps(["assembly_name"]);
 const assembly_url = ref(props.assembly_name);
 
-console.log("PROPS.ASS_NAME " + props.assembly_name);
-console.log("PROPS.ASS_URL  " + assembly_url.value);
-
 watch(
   () => props.assembly_name,
   (new_assembly_name) => {
@@ -69,7 +66,7 @@ for (let i = 0; i < 23; i++) {
 
       <div class="col-12 col-lg-9">
         <div class="border-top border-bottom p-1 h-100 w-100">
-          <OperationTimes class="" :timestamps="mockDates" style="height: 95%;" />
+          <OperationTimes class="" :assembly_name="assembly_url" style="height: 95%;" />
         </div>
       </div>
     </div>

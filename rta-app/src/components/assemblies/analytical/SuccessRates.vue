@@ -25,7 +25,6 @@ function updateData() {
       return jsonRes.json();
     })
     .then((jsonRes) => {
-      console.log(jsonRes);
       return jsonRes.map((x) => {
         return {
           name: OP_NAMES[x._id],
@@ -37,7 +36,6 @@ function updateData() {
     })
     .then((jsonRes) => {
       option.value.series[0].data = jsonRes;
-      console.log(jsonRes);
     });
 }
 
