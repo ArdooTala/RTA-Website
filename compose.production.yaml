@@ -1,0 +1,24 @@
+version: "3.7"
+
+services:
+  backend:
+    image: ardootala/rta-backend:latest
+    ports:
+      - 5000:5000
+    stdin_open: true
+    tty: true
+    # networks:
+    #   - backend
+
+  frontend:
+    image: ardootala/rta-frontend:latest
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    # networks:
+    #   - backend
+
+# networks:
+#   backend:
+

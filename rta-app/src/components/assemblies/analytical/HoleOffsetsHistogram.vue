@@ -18,7 +18,7 @@ const props = defineProps(["assembly_name"]);
 const hole_errors = ref([[0, 0]]);
 
 function updateData() {
-  fetch("http://159.89.15.80:5000/assemblies/hole_errors/" + props.assembly_name)
+  fetch("http://159.89.15.80/api/assemblies/hole_errors/" + props.assembly_name)
     .then((jsonRes) => {
       return jsonRes.json();
     })
