@@ -10,7 +10,7 @@ export default {
     };
   },
   mounted() {
-    fetch("http://localhost:5000/assemblies")
+    fetch("http://159.89.15.80:5000/assemblies")
       .then((jsonRes) => {
         return jsonRes.json();
       })

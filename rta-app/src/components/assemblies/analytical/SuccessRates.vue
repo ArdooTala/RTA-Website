@@ -20,7 +20,7 @@ const props = defineProps(["assembly_name"]);
 const OP_NAMES = { 0: "PICKING", 1: "PLACING", 2: "LOADING", 3: "SCREWING" };
 
 function updateData() {
-  fetch("http://localhost:5000/assemblies/success_rate/" + props.assembly_name)
+  fetch("http://159.89.15.80:5000/assemblies/success_rate/" + props.assembly_name)
     .then((jsonRes) => {
       return jsonRes.json();
     })

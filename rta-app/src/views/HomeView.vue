@@ -34,7 +34,7 @@ import { RouterLink, RouterView } from "vue-router";
 
 <style scoped>
 .bg_image {
-  background-image: url("src/assets/BG_2.jpg");
+  background-image: url("/BG_2.jpg");
   /* background-size: cover; */
   background-size: auto 100%;
   background-position: center;
