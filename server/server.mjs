@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import parts from "./routes/parts.mjs";
 import assemblies from "./routes/assemblies.mjs";
-import blocks from "./routes/blocks.mjs";
+import materials from "./routes/materials.mjs";
 import projects from "./routes/projects.mjs";
 import dotenv from "dotenv";
 
@@ -15,7 +15,7 @@ app.use(express.json());
 
 app.use(cors());
 
-app.use("/blocks", blocks);
+app.use("/materials", materials);
 app.use("/parts", parts);
 app.use("/assemblies", assemblies);
 app.use("/projects", projects);

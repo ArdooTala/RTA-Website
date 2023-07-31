@@ -22,7 +22,7 @@ import { ref, provide, watch } from "vue";
 const props = defineProps(["assembly_name"]);
 
 function updateData() {
-  fetch("http://159.89.15.80/api/assemblies/timestamps/" + props.assembly_name)
+  fetch(import.meta.env.VITE_BACKEND_BASE_URL + "assemblies/timestamps/" + props.assembly_name)
     .then((jsonRes) => {
       return jsonRes.json();
     })

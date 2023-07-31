@@ -1,5 +1,6 @@
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
+console.log(import.meta.env.VITE_BACKEND_BASE_URL);
 </script>
 
 <template>
@@ -36,7 +37,7 @@ import { RouterLink, RouterView } from "vue-router";
               >
             </li>
             <li class="nav-item me-2">
-              <RouterLink to="/materialpassports" class="nav-link disabled"
+              <RouterLink to="/mps" class="nav-link "
                 >MATERIALS</RouterLink
               >
             </li>

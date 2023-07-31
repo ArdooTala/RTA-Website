@@ -17,7 +17,7 @@ import { ref, provide, onMounted, watch, computed } from "vue";
 const props = defineProps(["assembly_name"]);
 
 function updateData() {
-  fetch("http://159.89.15.80/api/assemblies/workloads/" + props.assembly_name)
+  fetch(import.meta.env.VITE_BACKEND_BASE_URL + "assemblies/workloads/" + props.assembly_name)
     .then((jsonRes) => {
       return jsonRes.json();
     })
