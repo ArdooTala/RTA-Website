@@ -4,8 +4,8 @@ import { RouterLink } from "vue-router";
 import { ref, watch, onMounted } from "vue";
 
 const matID = ref("");
+const typeID = ref("");
 const checkedNames = ref([]);
-const mat_blocks = ref([]);
 const filtered_blocks = ref([]);
 const blk_types = ref([]);
 
@@ -62,7 +62,33 @@ watch(checkedNames, () => {
 <template>
   <div class="row mt-2">
     <div class="col-12 col-md-4">
-      <div class="col">
+      <button
+        class="btn btn-dark dropdown-toggle border w-100"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#typesCollapseTarget"
+      >
+        BLOCK TYPES
+      </button>
+
+      <div class="collapse show" id="typesCollapseTarget">
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            v-model="typeID"
+            placeholder="Tag"
+          />
+          <button
+            class="btn btn-outline-secondary"
+            type="button"
+            id="button-addon2"
+            @click=""
+          >
+            Search
+          </button>
+        </div>
+
         <div class="form-check border-bottom" v-for="blk_type in blk_types">
           <input
             class="form-check-input"
@@ -72,28 +98,29 @@ watch(checkedNames, () => {
             v-model="checkedNames"
           />
           <label
-            class="form-check-label d-flex justify-content-between w-100"
+            class="form-check-label d-flex justify-content-between mt-2"
             :for="blk_type"
           >
-            <h5 class="">{{ blk_type._id }}</h5>
-            <span class="badge rounded-pill text-bg-light align-self-center">
+            <h5>{{ blk_type._id }}</h5>
+            <span class="badge rounded-pill text-bg-light align-self-start">
               {{ blk_type.count }}
             </span>
           </label>
         </div>
       </div>
     </div>
+
     <div class="col-12 col-md-8">
       <button
         class="btn btn-dark dropdown-toggle border w-100"
         type="button"
         data-bs-toggle="collapse"
-        data-bs-target="#assembliesCollapseTarget"
+        data-bs-target="#blocksCollapseTarget"
       >
-        MATERIAL BLOCKS LIST
+        MATERIAL BLOCKS
       </button>
 
-      <div class="collapse show" id="assembliesCollapseTarget">
+      <div class="collapse show" id="blocksCollapseTarget">
         <div class="input-group">
           <input
             type="text"
