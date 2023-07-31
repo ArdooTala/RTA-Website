@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import AssemblyDashboard from "../components/assemblies/AssemblyDashboard.vue";
+import MaterialDashboard from "../components/materials/MaterialDashboard.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -49,28 +50,24 @@ const router = createRouter({
     },
     {
       path: "/mps",
-      name: "material_passports",
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: () => import("../views/MaterialPassportsView.vue"),
+      children: [
+        {
+            path: '',
+            name: "material_passports",
+            component: MaterialDashboard,
+            props: { assembly_name: '' }
+        },
+        {
+            path: ':material_name',
+            component: MaterialDashboard,
+            props: true
+        }
+      ]
     },
-    // {
-    //   path: "/about",
-    //   name: "about",
-    //   // route level code-splitting
-    //   // this generates a separate chunk (About.[hash].js) for this route
-    //   // which is lazy-loaded when the route is visited.
-    //   component: () => import("../views/AboutView.vue"),
-    // },
-    // {
-    //   path: "/team",
-    //   name: "team",
-    //   // route level code-splitting
-    //   // this generates a separate chunk (About.[hash].js) for this route
-    //   // which is lazy-loaded when the route is visited.
-    //   component: () => import("../views/TeamView.vue"),
-    // },
   ],
 });
 

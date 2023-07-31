@@ -1,6 +1,5 @@
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
-console.log(import.meta.env.VITE_BACKEND_BASE_URL);
 </script>
 
 <template>
