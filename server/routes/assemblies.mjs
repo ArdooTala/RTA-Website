@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
   //   console.log(doc);
   // }
   let aggRes = await aggCursor.toArray();
-  console.log(aggRes);
+  // console.log(aggRes);
   res.send(aggRes).status(200);
 });
 
@@ -52,7 +52,7 @@ router.get("/workloads", async (req, res) => {
   //   console.log(doc);
   // }
   let aggRes = await aggCursor.toArray();
-  console.log(aggRes);
+  // console.log(aggRes);
   res.send(aggRes).status(200);
 });
 
@@ -92,7 +92,7 @@ router.get("/workloads/:assembly_name", async (req, res) => {
   //   console.log(doc);
   // }
   let aggRes = await aggCursor.toArray();
-  console.log(aggRes);
+  // console.log(aggRes);
   res.send(aggRes).status(200);
 });
 
@@ -130,7 +130,7 @@ router.get("/hole_errors/", async (req, res) => {
   let collection = await db.collection("assembly_ops");
   const aggCursor = collection.aggregate(pipeline);
   let aggRes = await aggCursor.toArray();
-  console.log(aggRes);
+  // console.log(aggRes);
   res.send(aggRes).status(200);
 });
 
@@ -176,7 +176,7 @@ router.get("/hole_errors/:assembly_name", async (req, res) => {
   //   console.log(doc);
   // }
   let aggRes = await aggCursor.toArray();
-  console.log(aggRes);
+  // console.log(aggRes);
   res.send(aggRes).status(200);
 });
 
@@ -251,7 +251,7 @@ router.get("/success_rate/", async (req, res) => {
   let collection = await db.collection("assembly_ops");
   const aggCursor = collection.aggregate(pipeline);
   let aggRes = await aggCursor.toArray();
-  console.log(aggRes);
+  // console.log(aggRes);
   res.send(aggRes).status(200);
 });
 
@@ -331,7 +331,7 @@ router.get("/success_rate/:assembly_name", async (req, res) => {
   let collection = await db.collection("assembly_ops");
   const aggCursor = collection.aggregate(pipeline);
   let aggRes = await aggCursor.toArray();
-  console.log(aggRes);
+  // console.log(aggRes);
   res.send(aggRes).status(200);
 });
 
@@ -411,7 +411,7 @@ router.get("/parts_success_rate/", async (req, res) => {
   let collection = await db.collection("assembly_ops");
   const aggCursor = collection.aggregate(pipeline);
   let aggRes = await aggCursor.toArray();
-  console.log(aggRes);
+  // console.log(aggRes);
   res.send(aggRes).status(200);
 });
 
@@ -496,7 +496,7 @@ router.get("/parts_success_rate/:assembly_name", async (req, res) => {
   let collection = await db.collection("assembly_ops");
   const aggCursor = collection.aggregate(pipeline);
   let aggRes = await aggCursor.toArray();
-  console.log(aggRes);
+  // console.log(aggRes);
   res.send(aggRes).status(200);
 });
 
@@ -528,7 +528,7 @@ router.get("/timestamps/", async (req, res) => {
   let collection = await db.collection("assembly_ops");
   const aggCursor = collection.aggregate(pipeline);
   let aggRes = await aggCursor.toArray();
-  console.log(aggRes);
+  // console.log(aggRes);
   res.send(aggRes).status(200);
 });
 
@@ -565,7 +565,7 @@ router.get("/timestamps/:assembly_name", async (req, res) => {
     let collection = await db.collection("assembly_ops");
     const aggCursor = collection.aggregate(pipeline);
     let aggRes = await aggCursor.toArray();
-    console.log(aggRes);
+    // console.log(aggRes);
     res.send(aggRes).status(200);
   });
 

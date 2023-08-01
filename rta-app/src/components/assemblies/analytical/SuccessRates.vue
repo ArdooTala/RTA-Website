@@ -13,18 +13,23 @@ import {
   PolarComponent,
 } from "echarts/components";
 import VChart, { THEME_KEY } from "vue-echarts";
-import { ref, provide, onMounted, watch, computed } from "vue";
+import { ref, provide, onMounted, watch, computed, onUnmounted } from "vue";
 
 const props = defineProps(["assembly_name"]);
 
 const OP_NAMES = { 0: "PICKING", 1: "PLACING", 2: "LOADING", 3: "SCREWING" };
 
 function updateData() {
-  fetch(import.meta.env.VITE_BACKEND_BASE_URL + "assemblies/success_rate/" + props.assembly_name)
+  fetch(
+    import.meta.env.VITE_BACKEND_BASE_URL +
+      "assemblies/success_rate/" +
+      props.assembly_name
+  )
     .then((jsonRes) => {
       return jsonRes.json();
     })
     .then((jsonRes) => {
+      jsonRes.sort((a, b) => a._id - b._id);
       return jsonRes.map((x) => {
         return {
           name: OP_NAMES[x._id],
@@ -116,10 +121,37 @@ const option = ref({
   ],
 });
 
-updateData();
+// updateData();
 
 watch(props, () => {
   updateData();
+});
+
+let last_update = 0;
+async function watchDB() {
+  fetch(import.meta.env.VITE_BACKEND_BASE_URL + "lastupdate")
+    .then((jsonRes) => {
+      return jsonRes.json();
+    })
+    .then((jsonRes) => {
+      if (jsonRes.last_update != last_update.last_update) {
+        last_update = jsonRes;
+        // console.log(last_update, jsonRes);
+        updateData();
+      }
+      //   console.log(last_update);
+    });
+}
+
+let polling = null;
+onMounted(() => {
+  watchDB();
+  //   updateData();
+  polling = setInterval(watchDB, 3000);
+});
+
+onUnmounted(() => {
+  clearInterval(polling);
 });
 </script>
 

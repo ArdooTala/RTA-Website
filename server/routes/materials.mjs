@@ -14,7 +14,7 @@ router.get("/", async (req, res) => {
   //   console.log(doc);
   // }
   let aggRes = await aggCursor.toArray();
-  console.log(aggRes);
+  // console.log(aggRes);
   res.send(aggRes).status(200);
 });
 
@@ -35,7 +35,7 @@ router.get("/types", async (req, res) => {
   const aggCursor = collection.aggregate(pipeline);
 
   let aggRes = await aggCursor.toArray();
-  console.log(aggRes);
+  // console.log(aggRes);
   res.send(aggRes).status(200);
 });
 
@@ -54,7 +54,7 @@ router.get("/bytype", async (req, res) => {
   const aggCursor = collection.aggregate(pipeline);
 
   let aggRes = await aggCursor.toArray();
-  console.log(aggRes);
+  // console.log(aggRes);
   res.send(aggRes).status(200);
 });
 
@@ -73,7 +73,7 @@ router.get("/:mat_block_name", async (req, res) => {
   const aggCursor = collection.aggregate(pipeline);
 
   let aggRes = await aggCursor.toArray();
-  console.log(aggRes);
+  // console.log(aggRes);
   res.send(aggRes).status(200);
 });
 

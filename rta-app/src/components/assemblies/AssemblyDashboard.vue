@@ -22,12 +22,12 @@ watch(
   }
 );
 
-let mockDates = [];
-let t = new Date(2023, 7, 12, 18, 21, 0, 0).getTime();
-for (let i = 0; i < 23; i++) {
-  t += Math.random() * 10000 + 1000;
-  mockDates.push(new Date(t));
-}
+// let mockDates = [];
+// let t = new Date(2023, 7, 12, 18, 21, 0, 0).getTime();
+// for (let i = 0; i < 23; i++) {
+//   t += Math.random() * 10000 + 1000;
+//   mockDates.push(new Date(t));
+// }
 </script>
 
 <template>

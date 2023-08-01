@@ -17,12 +17,16 @@ import {
   LegendComponent,
 } from "echarts/components";
 import VChart, { THEME_KEY } from "vue-echarts";
-import { ref, provide, watch } from "vue";
+import { ref, provide, watch, onMounted, onUnmounted } from "vue";
 
 const props = defineProps(["assembly_name"]);
 
 function updateData() {
-  fetch(import.meta.env.VITE_BACKEND_BASE_URL + "assemblies/timestamps/" + props.assembly_name)
+  fetch(
+    import.meta.env.VITE_BACKEND_BASE_URL +
+      "assemblies/timestamps/" +
+      props.assembly_name
+  )
     .then((jsonRes) => {
       return jsonRes.json();
     })
@@ -137,6 +141,33 @@ updateData();
 
 watch(props, () => {
   updateData();
+});
+
+let last_update = 0;
+async function watchDB() {
+  fetch(import.meta.env.VITE_BACKEND_BASE_URL + "lastupdate")
+    .then((jsonRes) => {
+      return jsonRes.json();
+    })
+    .then((jsonRes) => {
+      if (jsonRes.last_update != last_update.last_update) {
+        last_update = jsonRes;
+        // console.log(last_update, jsonRes);
+        updateData();
+      }
+      //   console.log(last_update);
+    });
+}
+
+let polling = null;
+onMounted(() => {
+  watchDB();
+  //   updateData();
+  polling = setInterval(watchDB, 3000);
+});
+
+onUnmounted(() => {
+  clearInterval(polling);
 });
 </script>
 

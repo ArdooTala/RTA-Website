@@ -1,5 +1,5 @@
 <template>
-    <v-chart class="chart" :option="option" autoresize />
+  <v-chart class="chart" :option="option" autoresize />
 </template>
 
 <script setup>
@@ -12,19 +12,28 @@ import {
   LegendComponent,
 } from "echarts/components";
 import VChart, { THEME_KEY } from "vue-echarts";
-import { ref, provide, onMounted, watch, computed } from "vue";
+import { ref, provide, onMounted, watch, computed, onUnmounted } from "vue";
 
 const props = defineProps(["assembly_name"]);
 
 function updateData() {
-  fetch(import.meta.env.VITE_BACKEND_BASE_URL + "assemblies/hole_errors/" + props.assembly_name)
+  fetch(
+    import.meta.env.VITE_BACKEND_BASE_URL +
+      "assemblies/hole_errors/" +
+      props.assembly_name
+  )
     .then((jsonRes) => {
       return jsonRes.json();
     })
     .then((jsonRes) => {
       //   console.log(jsonRes);
       return jsonRes.map((p) => {
-        return p.report.split(",").slice(0, 2).map(Number).map(x => x*1000).concat(p.assembly);
+        return p.report
+          .split(",")
+          .slice(0, 2)
+          .map(Number)
+          .map((x) => x * 1000)
+          .concat(p.assembly);
       });
     })
     .then((jsonRes) => {
@@ -79,6 +88,33 @@ updateData();
 
 watch(props, () => {
   updateData();
+});
+
+let last_update = 0;
+async function watchDB() {
+  fetch(import.meta.env.VITE_BACKEND_BASE_URL + "lastupdate")
+    .then((jsonRes) => {
+      return jsonRes.json();
+    })
+    .then((jsonRes) => {
+      if (jsonRes.last_update != last_update.last_update) {
+        last_update = jsonRes;
+        // console.log(last_update, jsonRes);
+        updateData();
+      }
+      //   console.log(last_update);
+    });
+}
+
+let polling = null;
+onMounted(() => {
+  watchDB();
+  //   updateData();
+  polling = setInterval(watchDB, 3000);
+});
+
+onUnmounted(() => {
+  clearInterval(polling);
 });
 </script>
 

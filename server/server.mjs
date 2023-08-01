@@ -4,6 +4,7 @@ import parts from "./routes/parts.mjs";
 import assemblies from "./routes/assemblies.mjs";
 import materials from "./routes/materials.mjs";
 import projects from "./routes/projects.mjs";
+import dbWatch from "./db/dbWatch.mjs";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -19,6 +20,7 @@ app.use("/materials", materials);
 app.use("/parts", parts);
 app.use("/assemblies", assemblies);
 app.use("/projects", projects);
+app.use("/lastupdate", dbWatch);
 
 // start the Express server
 app.listen(PORT, "0.0.0.0", () => {
