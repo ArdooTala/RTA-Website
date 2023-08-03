@@ -4,24 +4,15 @@ import { ObjectId } from "mongodb";
 
 const router = express.Router();
 
-// Get a single material by name
-// router.get("/:mat_block_name", async (req, res) => {
-//   const pipeline = [
-//     {
-//       $match: {
-//         name: req.params.mat_block_name,
-//       },
-//     },
-//     { $project: { name: 1, type: 1 } },
-//   ];
-
-//   let collection = await db.collection("material_blocks");
-//   const aggCursor = collection.aggregate(pipeline);
-
-//   let aggRes = await aggCursor.toArray();
-//   // console.log(aggRes);
-//   res.send(aggRes).status(200);
-// });
+router.get("/material_record", async (req, res) => {
+  const collection = await db.collection("material_records");
+//   const q = {};
+//   q[req.query.qkey] = req.query.qvalue;
+//   console.log(req.query);
+  const cursor = await collection.find(req.query);
+  const result = await cursor.toArray();
+  res.send(result).status(200);
+});
 
 router.post("/material_record", async (req, res) => {
   let doc = req.body;
