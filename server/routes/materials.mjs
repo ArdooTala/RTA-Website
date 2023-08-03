@@ -10,9 +10,7 @@ router.get("/", async (req, res) => {
 
   let collection = await db.collection("material_blocks");
   const aggCursor = collection.aggregate(pipeline);
-  // for await (const doc of aggCursor) {
-  //   console.log(doc);
-  // }
+
   let aggRes = await aggCursor.toArray();
   // console.log(aggRes);
   res.send(aggRes).status(200);

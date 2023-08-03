@@ -13,9 +13,7 @@ router.get("/", async (req, res) => {
 
   let collection = await db.collection("assembly_ops");
   const aggCursor = collection.aggregate(pipeline);
-  // for await (const doc of aggCursor) {
-  //   console.log(doc);
-  // }
+
   let aggRes = await aggCursor.toArray();
   // console.log(aggRes);
   res.send(aggRes).status(200);
@@ -48,9 +46,7 @@ router.get("/workloads", async (req, res) => {
 
   let collection = await db.collection("assembly_ops");
   const aggCursor = collection.aggregate(pipeline);
-  // for await (const doc of aggCursor) {
-  //   console.log(doc);
-  // }
+
   let aggRes = await aggCursor.toArray();
   // console.log(aggRes);
   res.send(aggRes).status(200);
@@ -88,9 +84,7 @@ router.get("/workloads/:assembly_name", async (req, res) => {
 
   let collection = await db.collection("assembly_ops");
   const aggCursor = collection.aggregate(pipeline);
-  // for await (const doc of aggCursor) {
-  //   console.log(doc);
-  // }
+
   let aggRes = await aggCursor.toArray();
   // console.log(aggRes);
   res.send(aggRes).status(200);
@@ -172,9 +166,7 @@ router.get("/hole_errors/:assembly_name", async (req, res) => {
 
   let collection = await db.collection("assembly_ops");
   const aggCursor = collection.aggregate(pipeline);
-  // for await (const doc of aggCursor) {
-  //   console.log(doc);
-  // }
+
   let aggRes = await aggCursor.toArray();
   // console.log(aggRes);
   res.send(aggRes).status(200);
