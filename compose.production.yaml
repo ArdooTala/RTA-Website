@@ -1,24 +1,37 @@
-version: "3.7"
+version: "3.9"
 
 services:
   backend:
     image: ardootala/rta-backend:latest
-    # ports:
-    #   - 5000:5000
+    restart: always
     stdin_open: true
     tty: true
-    # networks:
-    #   - backend
 
   frontend:
     image: ardootala/rta-frontend:latest
+    restart: always
     ports:
-      - "80:80"
+      - 80:80
+      - 443:443
+    volumes:
+      - certbot-web:/vol/www
+      - proxy-dhparams:/vol/proxy
+      - certbot-certs:/etc/letsencrypt
     depends_on:
       - backend
-    # networks:
-    #   - backend
+    stdin_open: true
+    tty: true
+  
+  certbot:
+    image: ardootala/rta-certbot:latest
+    command: echo "Skipping..."
+    volumes:
+      - certbot-web:/vol/www
+      - certbot-certs:/etc/letsencrypt/
+    depends_on:
+      - frontend
 
-# networks:
-#   backend:
-
+volumes:
+  certbot-web:
+  proxy-dhparams:
+  certbot-certs:
