@@ -504,7 +504,7 @@ router.get("/timestamps/", async (req, res) => {
     },
     {
       $sort: {
-        "operations.timestamp": 1,
+        "operations.start_time": 1,
       },
     },
     {
@@ -541,7 +541,7 @@ router.get("/timestamps/:assembly_name", async (req, res) => {
       },
       {
         $sort: {
-          "operations.timestamp": 1,
+          "operations.start_time": 1,
         },
       },
       {
