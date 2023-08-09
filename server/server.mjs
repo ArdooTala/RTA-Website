@@ -6,6 +6,7 @@ import materials from "./routes/materials.mjs";
 import projects from "./routes/projects.mjs";
 import passports from "./routes/passports.mjs";
 import dbWatch from "./db/dbWatch.mjs";
+import speckleGQL from "./routes/speckle.mjs"
 // import dotenv from "dotenv";
 
 // dotenv.config();
@@ -23,6 +24,7 @@ app.use("/assemblies", assemblies);
 app.use("/projects", projects);
 app.use("/lastupdate", dbWatch);
 app.use("/records", passports);
+app.use("/clusters", speckleGQL);
 
 // start the Express server
 app.listen(PORT, "0.0.0.0", () => {
