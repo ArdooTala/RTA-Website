@@ -15,6 +15,9 @@ import {
   TitleComponent,
   TooltipComponent,
   LegendComponent,
+  ToolboxComponent,
+  DataZoomComponent,
+  VisualMapComponent,
 } from "echarts/components";
 import VChart, { THEME_KEY } from "vue-echarts";
 import { ref, provide, watch, onMounted, onUnmounted } from "vue";
@@ -31,20 +34,37 @@ function updateData() {
       return jsonRes.json();
     })
     .then((jsonRes) => {
+      const defaultColors = [
+        "#5470c6",
+        "#91cc75",
+        "#fac858",
+        "#ee6666",
+        "#73c0de",
+        "#3ba272",
+        "#fc8452",
+        "#9a60b4",
+        "#ea7ccc",
+      ];
       return jsonRes.map((x) => {
         let start = new Date();
         start.setTime(Date.parse(x.start_time));
         let end = new Date();
         end.setTime(Date.parse(x.end_time));
-
+        let d_name =
+          x.assembly.assembly_name +
+          " - " +
+          x.assembly.part_name;
         return {
-          name:
-            x.assembly.assembly_name +
-            " - " +
-            x.assembly.part_name +
-            " : " +
-            x.type,
+          name: d_name,
           value: [start, start, start, end, end],
+          groupId: x.type,
+          itemStyle: {
+            color: defaultColors[Number(x.type)],
+            borderWidth: 1
+          },
+          tooltip: {
+            formatter: "{b}",
+          },
         };
       });
     })
@@ -61,6 +81,9 @@ use([
   TitleComponent,
   TooltipComponent,
   LegendComponent,
+  ToolboxComponent,
+  DataZoomComponent,
+  VisualMapComponent,
 ]);
 provide(THEME_KEY, "dark");
 
@@ -79,12 +102,10 @@ const option = ref({
     splitLine: {
       show: true,
     },
-    //   data: [...Array(22).keys()].map((x) => "OP" + x),
     inverse: true,
+    scale: true,
     //   boundaryGap: false,
-    //   interval: 2,
   },
-
   xAxis: {
     type: "time",
     scale: true,
@@ -102,38 +123,31 @@ const option = ref({
     // trigger: "item",
     // formatter: "{c}",
   },
+  toolbox: {
+    feature: {
+      dataZoom: {
+        yAxisIndex: "none",
+      },
+    },
+  },
+  dataZoom: [
+    {
+      type: "inside",
+      start: 0,
+      end: 100,
+    },
+    {
+      start: 0,
+      end: 100,
+    },
+  ],
   series: [
-    // {
-    //   data: props.timestamps.map((v, i) => [i, v]),
-    //   type: "line",
-    // },
     {
       type: "boxplot",
       data: [{ name: "", value: 0 }],
-      colorBy: "series",
-      boxWidth: [1, 5],
-      encode: {
-        y: "name",
-        x: "value",
-        tooltip: "name",
-      },
-    },
-    // {
-    //   type: "boxplot",
-    //   data: props.timestamps.slice(2).map((v, i) => {
-    //     return {
-    //       name: "Operation " + i,
-    //       value: [props.timestamps[i], props.timestamps[i + 1], v, v, v],
-    //     };
-    //   }),
     //   colorBy: "series",
-    //   boxWidth: [1, 5],
-    //   //   encode: {
-    //   //     y: "value",
-    //   //     x: "name",
-    //   //     itemName: 'name'
-    //   //   },
-    // },
+      boxWidth: [1, 5],
+    },
   ],
 });
 

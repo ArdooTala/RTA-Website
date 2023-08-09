@@ -6,7 +6,6 @@ import { RouterLink, RouterView } from "vue-router";
   <div class="bg-dark background d-flex flex-column overflow-scroll">
     <nav
       class="navbar navbar-expand-lg bg-dark border-bottom border-bottom-light"
-      data-bs-theme="dark"
     >
       <div class="container-fluid ">
         <h1 class="navbar-brand">RECONWOOD</h1>
@@ -15,13 +14,10 @@ import { RouterLink, RouterView } from "vue-router";
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse ms-5" id="navbarNav">
+        <div class="collapse navbar-collapse ms-5 justify-content-center" id="navbarNav">
           <ul class="navbar-nav">
             <li class="nav-item me-2">
               <RouterLink to="/" class="nav-link">HOME</RouterLink>
@@ -66,7 +62,7 @@ import { RouterLink, RouterView } from "vue-router";
       </div>
     </nav>
 
-    <div class="container-fluid flex-fill" data-bs-theme="dark">
+    <div class="container-fluid flex-fill">
       <RouterView class="" />
     </div>
   </div>
@@ -76,7 +72,7 @@ import { RouterLink, RouterView } from "vue-router";
 .background {
   height: 100vh;
   width: 100vw;
-  background-attachment: fixed;
+  background-attachment: scroll;
   padding: 1em; padding-top: 0px;
 }
 </style>
