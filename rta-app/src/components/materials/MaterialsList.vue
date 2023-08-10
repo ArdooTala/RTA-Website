@@ -123,7 +123,6 @@ watch(checkedNames, () => {
                             <div class="accordion-header justify-content-between">
                                 <button type="button" class="btn w-100 me-auto d-flex align-items-center"
                                     data-bs-toggle="collapse" :data-bs-target="'#' + mat_block._id">
-                                    <!-- <EcosystemIcon class="me-2" /> -->
                                     <h5 class="p-2 m-0 me-auto">{{ mat_block.name }}</h5>
                                     <span class="badge rounded-pill text-bg-light">
                                         {{ mat_block.type }}
@@ -134,14 +133,7 @@ watch(checkedNames, () => {
                             <div :id="mat_block._id" class="accordion-collapse collapse bg-transparent"
                                 data-bs-parent="#assembliesAccordion">
                                 <div class="accordion-body">
-                                    <p>{{ mat_block || "KIR" }}</p>
-                                    <!-- <AssemblyCard class="">
-                <template #icon><EcosystemIcon /></template>
-                <template #start>{{ ass._id }}</template>
-                <template #end>{{ ass._id }}</template>
-                <template #parts_count>{{ ass.count }}</template>
-              </AssemblyCard> -->
-
+                                    <!-- <p>{{ mat_block || "-" }}</p> -->
                                     <router-link :to="'/mps/' + mat_block.name" type="button"
                                         class="btn btn-dark border w-100 mt-4">Open in Dashboard</router-link>
                                 </div>
