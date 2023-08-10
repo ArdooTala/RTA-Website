@@ -65,6 +65,14 @@ router.get("/:mat_block_name", async (req, res) => {
       },
     },
     { $project: { name: 1, type: 1 } },
+    {
+      $lookup: {
+        from: "material_records",
+        localField: "name",
+        foreignField: "block_name",
+        as: "records",
+      },
+    },
   ];
 
   let collection = await db.collection("material_blocks");
@@ -73,6 +81,16 @@ router.get("/:mat_block_name", async (req, res) => {
   let aggRes = await aggCursor.toArray();
   // console.log(aggRes);
   res.send(aggRes).status(200);
+});
+
+// Get a single material by name
+router.post("/", async (req, res) => {
+  let doc = req.body;
+  doc.timestamp = new Date();
+  const collection = await db.collection("material_blocks");
+  const result = await collection.insertOne(doc);
+  // console.log(`${result.insertedCount} documents were inserted`);
+  res.send(result).status(201);
 });
 
 export default router;

@@ -58,8 +58,8 @@ const router = createRouter({
         {
             path: '',
             name: "material_passports",
-            component: MaterialDashboard,
-            props: { assembly_name: '' }
+            component: () => import("../components/materials/MaterialsList.vue"),
+            // props: { assembly_name: '' }
         },
         {
             path: ':material_name',
