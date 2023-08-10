@@ -7,7 +7,5 @@ const holeOffsets = ref();
 </script>
 
 <template>
-    <div class="row h-100 mt-1">
-        <router-view />
-    </div>
+    <router-view />
 </template>

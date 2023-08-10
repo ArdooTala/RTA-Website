@@ -48,7 +48,7 @@ watch(props, () => {
 </script>
 
 <template>
-    <div class="row h-100 d-flex flex-column justify-content-around" id="material_dashboard">
+    <div class="row h-100 d-flex align-items-center justify-content-center" id="material_dashboard">
         <div class="col-12 row">
             <div v-if="found" class="col-12 d-flex justify-content-center">
                 <div class="col-12 col-md-6 col-lg-4" v-for="material_data in materials_data">
