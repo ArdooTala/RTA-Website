@@ -50,17 +50,14 @@ function updateData() {
         start.setTime(Date.parse(x.start_time));
         let end = new Date();
         end.setTime(Date.parse(x.end_time));
-        let d_name =
-          x.assembly.assembly_name +
-          " - " +
-          x.assembly.part_name;
+        let d_name = x.assembly.assembly_name + " - " + x.assembly.part_name;
         return {
           name: d_name,
           value: [start, start, start, end, end],
           groupId: x.type,
           itemStyle: {
             color: defaultColors[Number(x.type)],
-            borderWidth: 1
+            borderWidth: 1,
           },
           tooltip: {
             formatter: "{b}",
@@ -145,7 +142,7 @@ const option = ref({
     {
       type: "boxplot",
       data: [{ name: "", value: 0 }],
-    //   colorBy: "series",
+      //   colorBy: "series",
       boxWidth: [1, 5],
     },
   ],
