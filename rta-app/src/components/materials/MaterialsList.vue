@@ -1,7 +1,7 @@
 <script setup>
 // import MaterialCard from "./MaterialCard.vue";
 import { RouterLink } from "vue-router";
-import { ref, watch, onMounted } from "vue";
+import { ref, watch } from "vue";
 
 const matID = ref("");
 const typeID = ref("");
