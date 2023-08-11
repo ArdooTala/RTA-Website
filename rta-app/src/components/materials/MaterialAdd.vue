@@ -4,13 +4,13 @@
             <p class="text-center display-2">{{ material_name }}</p>
             <p class="text-center mb-0">Not Found</p>
         </div>
-        <div class="col-12 col-lg-8 border-bottom mb-5">
+        <div class="col-12 col-lg-8 border-bottom mb-5 mx-auto">
             <p class="text-center mb-0">TYPE:</p>
             <p class="display-6 text-center">
                 {{ block_type }}
             </p>
         </div>
-        <div class="col-12 col-lg-8">
+        <div class="col-12 col-lg-8  mx-auto">
             <label class="form-label">Height</label>
             <div class="btn-group w-100 mb-3" role="group">
                 <input type="radio" class="btn-check" name="beam-type" id="beam-tall" value="T" autocomplete="off"
