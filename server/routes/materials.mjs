@@ -64,7 +64,6 @@ router.get("/:mat_block_name", async (req, res) => {
         name: req.params.mat_block_name,
       },
     },
-    { $project: { name: 1, type: 1 } },
     {
       $lookup: {
         from: "material_records",

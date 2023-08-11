@@ -89,9 +89,7 @@ const block_type = computed(() => {
         (beam_height.value || "*") +
         (lap_joint_type.value || "**") +
         '_' +
-        String(crosses_count.value).padStart(2, '0') +
-        '-' +
-        String(block_number.value).padStart(3, '0')
+        String(crosses_count.value).padStart(2, '0')
 })
 
 const selection_is_valid = computed(() => {
@@ -111,6 +109,10 @@ function addToDB() {
             body: JSON.stringify({
                 name: props.material_name,
                 type: block_type.value,
+                beam_height: beam_height.value,
+                lap_joints: lap_joint_type.value,
+                crosses: crosses_count.value,
+                id_number: block_number.value,
             }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8"

@@ -8,6 +8,15 @@
             <p class="display-6 text-center">
                 {{ material_data.type }}
             </p>
+
+            <div class="fw-lighter">
+                <p class=" mb-0">Height: {{ material_data.beam_height || "-" }}</p>
+                <p class=" mb-0">Lap Joints: {{ material_data.lap_joints || "-" }}</p>
+                <p class=" mb-0">Number of Crosses: {{ material_data.crosses || "-" }}</p>
+                <p class=" mb-0">ID#: {{ material_data.id_number || "-" }}</p>
+            </div>
+
+
         </div>
 
         <div class="col-12 col-lg-8 border-bottom mb-5 mx-auto">
