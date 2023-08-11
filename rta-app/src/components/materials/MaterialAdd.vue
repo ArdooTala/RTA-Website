@@ -62,13 +62,27 @@
 </template>
 
 <script setup>
-import { ref, defineProps, computed } from "vue";
+import { ref, defineProps, computed, watch } from "vue";
 
 const props = defineProps(["material_name"]);
 const beam_height = ref("");
 const lap_joint_type = ref("");
 const crosses_count = ref(0);
 const block_number = ref(0);
+
+function extractType() {
+    const regex = new RegExp("B(?<height>T|S)(?<lap>NJ|LB|LP|LN)_(?<cross>\\d{2})-(?<num>\\d{3,})", "i");
+    const reg_res = props.material_name.match(regex);
+    if (!reg_res) return;
+
+    console.log(reg_res);
+        beam_height.value = reg_res.groups.height;
+        lap_joint_type.value = reg_res.groups.lap;
+        crosses_count.value = reg_res.groups.cross;
+        block_number.value = reg_res.groups.num;
+}
+
+extractType()
 
 const block_type = computed(() => {
     return 'B' +
@@ -79,6 +93,7 @@ const block_type = computed(() => {
         '-' +
         String(block_number.value).padStart(3, '0')
 })
+
 const selection_is_valid = computed(() => {
     if (beam_height.value == "") return false;
     if (lap_joint_type.value == "") return false;
@@ -105,4 +120,8 @@ function addToDB() {
         .then((json) => console.log(json))
         .then(() => emit_refresh('added-to-db'));
 }
+
+watch(props, () => {
+    extractType();
+});
 </script>
