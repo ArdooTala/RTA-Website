@@ -36,7 +36,7 @@ watch(props, () => {
     <div class="row h-100 d-flex align-items-center justify-content-center" id="material_dashboard">
         <div class="col-12 row">
             <div v-if="found" class="col-12 d-flex justify-content-center">
-                <MaterialData v-for="material_data in materials_data" :material_data="material_data"/>
+                <MaterialData v-for="material_data in materials_data" :material_data="material_data" @added-to-db="updateData"/>
             </div>
             <div v-else class="col-12 d-flex justify-content-center">
                 <MaterialAdd :material_name="material_name" @added-to-db="updateData"/>
