@@ -10,9 +10,9 @@
             </p>
 
             <div class="fw-lighter">
-                <p class=" mb-0">Height: {{ material_data.beam_height || "-" }}</p>
+                <!-- <p class=" mb-0">Height: {{ material_data.beam_height || "-" }}</p>
                 <p class=" mb-0">Lap Joints: {{ material_data.lap_joints || "-" }}</p>
-                <p class=" mb-0">Number of Crosses: {{ material_data.crosses || "-" }}</p>
+                <p class=" mb-0">Number of Crosses: {{ material_data.crosses || "-" }}</p> -->
                 <p class=" mb-0">ID#: {{ material_data.id_number || "-" }}</p>
             </div>
 
@@ -20,7 +20,7 @@
         </div>
 
         <div class="col-12 col-lg-8 border-bottom mb-5 mx-auto">
-            <div class="input-group input-group-sm">
+            <div class="input-group input-group-sm mb-2">
                 <!-- <input type="text" class="form-control" list="datalistOptions" v-model="newRecAssm"
                     placeholder="Assembly Name" /> -->
                 <input type="text" class="form-control" v-model="newRecPart1" placeholder="PSM01" />
@@ -36,7 +36,7 @@
             </div>
 
             <button class="btn btn-outline-secondary mb-3 w-100" type="button" id="button-addon3"
-                :disabled="newRecPart3.length <= 0" @click="addRecord">
+                :disabled="!selection_is_valid" @click="addRecord">
                 Add Record
             </button>
 
@@ -67,12 +67,20 @@
 </template>
 
 <script setup>
-import { ref, defineProps } from "vue";
+import { ref, defineProps, computed } from "vue";
 
 const props = defineProps(["material_data"]);
 const newRecPart1 = ref("PSM01");
-const newRecPart2 = ref("01");
+const newRecPart2 = ref("");
 const newRecPart3 = ref("");
+
+const selection_is_valid = computed(() => {
+    if (newRecPart1.value.length <= 0) return false;
+    if (newRecPart2.value.length <= 0) return false;
+    if (newRecPart3.value.length <= 0) return false;
+    
+    return true;
+});
 
 const emit_refresh = defineEmits(["added-to-db"])
 
@@ -83,7 +91,7 @@ function addRecord() {
             body: JSON.stringify({
                 part_name: newRecPart1.value + "-" + String(newRecPart2.value).padStart(2, '0') + "-" + String(newRecPart3.value).padStart(2, '0'),
                 timestamp: new Date(),
-                assembly: "First",
+                assembly: "Second",
                 block_name: props.material_data.name
             }),
             headers: {
