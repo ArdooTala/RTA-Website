@@ -105,6 +105,12 @@ router.get("/hole_errors/", async (req, res) => {
       },
     },
     {
+      $unwind: {
+        path: "$operations.reports",
+        preserveNullAndEmptyArrays: false,
+      },
+    },
+    {
       $match: {
         "operations.reports.key": "hole_pos_error",
       },
@@ -114,9 +120,7 @@ router.get("/hole_errors/", async (req, res) => {
         _id: "$_id",
         assembly: "$assembly.assembly_name",
         part: "$assembly.part_name",
-        report: {
-          $first: "$operations.reports.value",
-        },
+        report: "$operations.reports.value",
       },
     },
   ];
@@ -148,6 +152,12 @@ router.get("/hole_errors/:assembly_name", async (req, res) => {
       },
     },
     {
+      $unwind: {
+        path: "$operations.reports",
+        preserveNullAndEmptyArrays: false,
+      },
+    },
+    {
       $match: {
         "operations.reports.key": "hole_pos_error",
       },
@@ -157,9 +167,7 @@ router.get("/hole_errors/:assembly_name", async (req, res) => {
         _id: "$_id",
         assembly: "$assembly.assembly_name",
         part: "$assembly.part_name",
-        report: {
-          $first: "$operations.reports.value",
-        },
+        report: "$operations.reports.value",
       },
     },
   ];
