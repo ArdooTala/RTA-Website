@@ -17,7 +17,7 @@ import { ref, provide, onMounted, watch, computed, onUnmounted } from "vue";
 
 const props = defineProps(["assembly_name"]);
 
-const OP_NAMES = { 0: "PICKING", 1: "PLACING", 2: "LOADING", 3: "SCREWING" };
+const OP_NAMES = { 0: "PICKING", 1: "PLACING", 2: "LOADING", 3: "SCREWING", 8: "HOME" };
 
 function updateData() {
   fetch(
