@@ -13,6 +13,7 @@ import {
 } from "echarts/components";
 import VChart, { THEME_KEY } from "vue-echarts";
 import { ref, provide, onMounted, watch, computed, onUnmounted } from "vue";
+import histogram from "histogramjs";
 
 const props = defineProps(["assembly_name"]);
 const hole_errors = ref([[0, 0]]);
@@ -20,8 +21,8 @@ const hole_errors = ref([[0, 0]]);
 function updateData() {
   fetch(
     import.meta.env.VITE_BACKEND_BASE_URL +
-      "assemblies/hole_errors/" +
-      props.assembly_name
+    "assemblies/hole_errors/" +
+    props.assembly_name
   )
     .then((jsonRes) => {
       return jsonRes.json();
@@ -42,17 +43,11 @@ const holeDist = computed(() => {
   let dists = hole_errors.value.map(
     (x) => Math.sqrt(x[0] * x[0] + x[1] * x[1]) * 1000
   );
-  let grouped = dists.reduce(
-    (entryMap, e) =>
-      entryMap.set(Math.round(e), [
-        // ...(entryMap.get(Math.round(e, 0.2)) || []),
-        ...(entryMap.get(Math.round(e)) || []),
-        e,
-      ]),
-    new Map()
-  );
-  let histogram = Array.from(grouped.entries());
-  return histogram.map((x) => [x[0], x[1].length]);
+  let hist = histogram({
+    data: dists,
+    bins: 10
+  });
+  return hist.map((x) => [(x.reduce((a, b) => a + b, 0) / x.length).toFixed(), x.length]);
 });
 
 // ECharts Setup
@@ -79,7 +74,7 @@ const option = ref({
   },
   xAxis: {
     type: "value",
-    interval: 1,
+    // interval: 1,
     boundaryGap: ["30%", "20%"],
   },
   yAxis: {
@@ -88,7 +83,7 @@ const option = ref({
     axisLine: {
       onZero: false,
     },
-    interval: 5,
+    // interval: 5,
   },
   series: [
     {

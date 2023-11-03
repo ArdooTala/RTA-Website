@@ -11,6 +11,7 @@
     "@popperjs/core": "^2.11.8",
     "bootstrap": "^5.3.0",
     "echarts": "^5.4.3",
+    "histogramjs": "^0.0.1",
     "vue": "^3.3.4",
     "vue-echarts": "^6.6.0",
     "vue-router": "^4.2.2"
