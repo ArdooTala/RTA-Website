@@ -52,7 +52,7 @@ router.post("/operation_record", async (req, res) => {
 router.put("/operation_record", async (req, res) => {
   let doc = req.body;
   const options = { upsert: true };
-  doc.timestamp = new Date();
+  doc["$setOnInsert"] = {"timestamp": new Date()};
   const collection = await db.collection("operation_records");
   const result = await collection.updateOne(req.query, doc, options);
   // console.log(`${result.insertedCount} documents were inserted`);
