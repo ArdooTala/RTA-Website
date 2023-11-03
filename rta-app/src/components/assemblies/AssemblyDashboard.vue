@@ -50,17 +50,17 @@ watch(
         </div>
       </div>
 
-      <div class="col-6 col-lg-2 custom-height">
+      <div class="col-12 col-lg-4 custom-height">
         <div class="border-top border-bottom p-1 h-100 w-100">
           <AgentWorkloads :assembly_name="assembly_url" style="height: 95%" />
         </div>
       </div>
 
-      <div class="col-6 col-lg-2 custom-height">
+      <!-- <div class="col-6 col-lg-2 custom-height">
         <div class="border-top border-bottom p-1 h-100 w-100">
           <SuccessRateParts :assembly_name="assembly_url" style="height: 95%" />
         </div>
-      </div>
+      </div> -->
     </div>
 
     <div
