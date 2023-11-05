@@ -1,5 +1,6 @@
 <script setup>
 import AssemblyCard from "./AssemblyCard.vue";
+import AssemblyOperationsList from "./AssemblyOperationsList.vue";
 import AgentWorkloads from "./analytical/AgentWorkloads.vue";
 import SuccessRates from "./analytical/SuccessRates.vue";
 import SuccessRateParts from "./analytical/SuccessRateParts.vue";
@@ -39,20 +40,22 @@ watch(
       class="col-12 p-1 row custom-flex"
       style="flex-basis: 0%; flex-grow: 2"
     >
-      <div class="col-12 col-lg-8">
+      <div class="col-12 col-lg-6">
         <p class="mb-auto display-4">{{ assembly_url || "OVERVIEW" }}</p>
         <div class="border-top border-bottom p-1">
-          <AssemblyCard class="">
-            <template #start>Start Time</template>
-            <template #end>End Time</template>
-            <template #parts_count>23</template>
-          </AssemblyCard>
+          <AssemblyOperationsList :assembly_name="assembly_url"/>
         </div>
       </div>
 
-      <div class="col-12 col-lg-4 custom-height">
+      <div class="col-6 col-lg-3 custom-height">
         <div class="border-top border-bottom p-1 h-100 w-100">
           <AgentWorkloads :assembly_name="assembly_url" style="height: 95%" />
+        </div>
+      </div>
+
+      <div class="col-6 col-lg-3 custom-height">
+        <div class="border-top border-bottom p-1 h-100 w-100">
+          <SuccessRates :assembly_name="assembly_url" style="height: 95%" />
         </div>
       </div>
 
@@ -67,13 +70,7 @@ watch(
       class="col-12 p-1 row custom-flex"
       style="flex-basis: 0%; flex-grow: 3"
     >
-      <div class="col-12 col-lg-3 custom-height">
-        <div class="border-top border-bottom p-1 h-100 w-100">
-          <SuccessRates :assembly_name="assembly_url" style="height: 95%" />
-        </div>
-      </div>
-
-      <div class="col-12 col-lg-9 custom-height">
+      <div class="col-12 col-lg-12 custom-height">
         <div class="border-top border-bottom p-1 h-100 w-100">
           <OperationTimes
             class=""

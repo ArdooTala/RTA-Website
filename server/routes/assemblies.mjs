@@ -19,12 +19,25 @@ router.get("/", async (req, res) => {
   res.send(aggRes).status(200);
 });
 
+router.get("/:assembly_name", async (req, res) => {
+  const pipeline = [
+    { $match: { "operation.assembly_name": req.params.assembly_name } },
+  ];
+
+  let collection = await db.collection("assembly_ops_2");
+  const aggCursor = collection.aggregate(pipeline);
+
+  let aggRes = await aggCursor.toArray();
+  // console.log(aggRes);
+  res.send(aggRes).status(200);
+});
+
 // Get all the workloads by count
 router.get("/workloads", async (req, res) => {
   const pipeline = [
     {
       $project: {
-        "executer": 1,
+        executer: 1,
       },
     },
     {
@@ -55,7 +68,7 @@ router.get("/workloads/:assembly_name", async (req, res) => {
     },
     {
       $project: {
-        "executer": 1,
+        executer: 1,
       },
     },
     {
@@ -159,7 +172,7 @@ router.get("/success_rate/", async (req, res) => {
   const pipeline = [
     {
       $project: {
-        "reports": 0,
+        reports: 0,
         "operations.end_time": 0,
         "operations.start_time": 0,
       },
@@ -239,9 +252,9 @@ router.get("/success_rate/:assembly_name", async (req, res) => {
     },
     {
       $project: {
-        "reports": 0,
-        "end_time": 0,
-        "start_time": 0,
+        reports: 0,
+        end_time: 0,
+        start_time: 0,
       },
     },
     {
@@ -479,7 +492,7 @@ router.get("/timestamps/", async (req, res) => {
   const pipeline = [
     {
       $sort: {
-        "start_time": 1,
+        start_time: 1,
       },
     },
     {
@@ -501,33 +514,33 @@ router.get("/timestamps/", async (req, res) => {
 
 // Get the assembly's assembly times
 router.get("/timestamps/:assembly_name", async (req, res) => {
-    const pipeline = [
-      {
-        $match: {
-          "operation.assembly_name": req.params.assembly_name,
-        },
+  const pipeline = [
+    {
+      $match: {
+        "operation.assembly_name": req.params.assembly_name,
       },
-      {
-        $sort: {
-          "start_time": 1,
-        },
+    },
+    {
+      $sort: {
+        start_time: 1,
       },
-      {
-        $project: {
-          assembly: "$operation",
-          start_time: "$start_time",
-          end_time: "$end_time",
-          type: "$operation.type",
-        },
+    },
+    {
+      $project: {
+        assembly: "$operation",
+        start_time: "$start_time",
+        end_time: "$end_time",
+        type: "$operation.type",
       },
-    ];
-  
-    let collection = await db.collection("assembly_ops_2");
-    const aggCursor = collection.aggregate(pipeline);
-    let aggRes = await aggCursor.toArray();
-    // console.log(aggRes);
-    res.send(aggRes).status(200);
-  });
+    },
+  ];
+
+  let collection = await db.collection("assembly_ops_2");
+  const aggCursor = collection.aggregate(pipeline);
+  let aggRes = await aggCursor.toArray();
+  // console.log(aggRes);
+  res.send(aggRes).status(200);
+});
 
 // Get a single assembly by name
 router.get("/:name", async (req, res) => {
