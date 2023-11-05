@@ -7,7 +7,7 @@ const props = defineProps(["assembly_name"])
 const assemblyOperations = ref([])
 
 function updateData() {
-    fetch(import.meta.env.VITE_BACKEND_BASE_URL + "assemblies" + "/" + props.assembly_name)
+    fetch(import.meta.env.VITE_BACKEND_BASE_URL + "assemblies/operations/" + props.assembly_name)
         .then((jsonRes) => {
             return jsonRes.json();
         })

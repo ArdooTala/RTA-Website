@@ -19,7 +19,20 @@ router.get("/", async (req, res) => {
   res.send(aggRes).status(200);
 });
 
-router.get("/:assembly_name", async (req, res) => {
+router.get("/operations", async (req, res) => {
+  const pipeline = [
+    { $limit: 10 }
+  ];
+
+  let collection = await db.collection("assembly_ops_2");
+  const aggCursor = collection.aggregate(pipeline);
+
+  let aggRes = await aggCursor.toArray();
+  // console.log(aggRes);
+  res.send(aggRes).status(200);
+});
+
+router.get("/operations/:assembly_name", async (req, res) => {
   const pipeline = [
     { $match: { "operation.assembly_name": req.params.assembly_name } },
   ];
