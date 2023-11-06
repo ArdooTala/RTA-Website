@@ -1,5 +1,7 @@
 <template>
-  <v-chart class="chart" :option="option" autoresize />
+  <div class="ratio ratio-16x9">
+    <v-chart class="chart" :option="option" autoresize />
+  </div>
 </template>
 
 <script setup>

@@ -1,5 +1,7 @@
 <template>
-  <v-chart class="chart" :option="option" autoresize />
+  <div class="ratio ratio-1x1">
+    <v-chart class="chart" :option="option" autoresize />
+  </div>
 </template>
 
 <script setup>
@@ -22,8 +24,8 @@ const OP_NAMES = { 0: "PICKING", 1: "PLACING", 2: "LOADING", 3: "SCREWING", 8: "
 function updateData() {
   fetch(
     import.meta.env.VITE_BACKEND_BASE_URL +
-      "assemblies/success_rate/" +
-      props.assembly_name
+    "assemblies/success_rate/" +
+    props.assembly_name
   )
     .then((jsonRes) => {
       return jsonRes.json();
@@ -83,19 +85,24 @@ const option = ref({
     type: "category",
     // data: ["PICKING", "PLACING", "LOADING", "SCREWING"],
     z: 10,
+    axisLabel: {
+      color: 'white'
+    }
   },
 
   polar: {
-    radius: ["30%", "60%"],
+    radius: ["20%", "60%"],
   },
-
   series: [
     {
       type: "bar",
       data: [],
       coordinateSystem: "polar",
       roundCap: true,
-      itemStyle: {},
+      itemStyle: {
+        opacity: 1
+      },
+      showBackground: true,
     },
     // {
     //   type: "pie",
