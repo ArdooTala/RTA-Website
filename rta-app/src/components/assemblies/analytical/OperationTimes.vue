@@ -96,9 +96,9 @@ const option = ref({
       // rotate: -90,
       // interval: 0,
     },
-    splitLine: {
-      show: true,
-    },
+    // splitLine: {
+    //   show: true,
+    // },
     inverse: true,
     scale: true,
     //   boundaryGap: false,

@@ -1,5 +1,6 @@
 <script setup>
-import AssemblyOperationCard from "./AssemblyOperationCard.vue";
+import AssemblyOperationCard from "./AssembledPartCard.vue";
+import AssembledPartCard from "./AssembledPartCard.vue";
 import { ref, provide, onMounted, watch, computed, onUnmounted } from "vue";
 
 
@@ -30,33 +31,28 @@ onMounted(() => {
 <template>
     <div class="">
         <button class="btn btn-dark dropdown-toggle border w-100 mt-2 " type="button" data-bs-toggle="collapse"
-            data-bs-target="#assemblyOpsCollapseTarget">
-            OPERATIONS
+            data-bs-target="#assembledPartsCollapseTarget">
+            ASSEMBLED PARTS
         </button>
 
-        <div class="collapse hide" id="assemblyOpsCollapseTarget">
+        <div class="collapse hide" id="assembledPartsCollapseTarget">
             <div class="accordion accordion-flush overflow-hidden" id="assembliesAccordion">
-                <div v-for="assOp in assemblyOperations" class="accordion-item p-2 border-bottom bg-transparent">
+                <div v-for="assedPart in assemblyOperations" class="accordion-item p-2 border-bottom bg-transparent">
                     <div class="accordion-header justify-content-between">
                         <button type="button" class="btn w-100 me-auto d-flex align-items-center" data-bs-toggle="collapse"
-                            :data-bs-target="'#' + assOp._id">
+                            :data-bs-target="'#' + assedPart._id">
                             <h6 class="p-2 m-0 me-auto">
-                                {{ assOp.operation.part_name }} -
-                                {{ assOp.operation.type }}
-                                [{{ assOp.result }}]
+                                {{ assedPart._id }}
                             </h6>
-                            <span class="badge rounded-pill text-bg-light">{{ assOp.count }}</span>
+                            <span class="badge rounded-pill text-bg-light">{{ assedPart.count }}</span>
                         </button>
                     </div>
 
-                    <div :id="assOp._id" class="accordion-collapse collapse bg-transparent"
+                    <div :id="assedPart._id" class="accordion-collapse collapse bg-transparent"
                         data-bs-parent="#assembliesAccordion">
                         <div class="accordion-body">
-                            <AssemblyOperationCard class="">
-                                <template #start>{{ assOp.start_time }}</template>
-                                <template #end>{{ assOp.end_time }}</template>
-                                <template #reports>{{ assOp.reports }}</template>
-                            </AssemblyOperationCard>
+                            <AssembledPartCard class="" :assed-part="assedPart">
+                            </AssembledPartCard>
                         </div>
                     </div>
                 </div>

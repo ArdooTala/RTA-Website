@@ -21,7 +21,24 @@ router.get("/", async (req, res) => {
 
 router.get("/operations", async (req, res) => {
   const pipeline = [
-    { $limit: 10 }
+    {
+      $sort:
+        /**
+         * Provide any number of field/order pairs.
+         */
+        {
+          start_time: 1,
+        },
+    },
+    {
+      $group: {
+        _id: "$operation.part_name",
+        operations: {
+          $push: "$$ROOT",
+        },
+      },
+    },
+    { $limit: 10 },
   ];
 
   let collection = await db.collection("assembly_ops_2");
@@ -35,6 +52,23 @@ router.get("/operations", async (req, res) => {
 router.get("/operations/:assembly_name", async (req, res) => {
   const pipeline = [
     { $match: { "operation.assembly_name": req.params.assembly_name } },
+    {
+      $sort:
+        /**
+         * Provide any number of field/order pairs.
+         */
+        {
+          start_time: 1,
+        },
+    },
+    {
+      $group: {
+        _id: "$operation.part_name",
+        operations: {
+          $push: "$$ROOT",
+        },
+      },
+    },
   ];
 
   let collection = await db.collection("assembly_ops_2");

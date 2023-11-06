@@ -1,6 +1,6 @@
 <script setup>
 import AssemblyCard from "./AssemblyCard.vue";
-import AssemblyOperationsList from "./AssemblyOperationsList.vue";
+import AssembledPartsList from "./operations/AssembledPartsList.vue";
 import AgentWorkloads from "./analytical/AgentWorkloads.vue";
 import SuccessRates from "./analytical/SuccessRates.vue";
 import SuccessRateParts from "./analytical/SuccessRateParts.vue";
@@ -43,7 +43,7 @@ watch(
       <div class="col-12 col-lg-6">
         <p class="mb-auto display-4">{{ assembly_url || "OVERVIEW" }}</p>
         <div class="border-top border-bottom p-1">
-          <AssemblyOperationsList :assembly_name="assembly_url"/>
+          <AssembledPartsList :assembly_name="assembly_url"/>
         </div>
       </div>
 
