@@ -7,6 +7,7 @@ import SuccessRateParts from "./analytical/SuccessRateParts.vue";
 import HoleOffsetsScatter from "./analytical/HoleOffsetsScatter.vue";
 import HoleOffsetsHistogram from "./analytical/HoleOffsetsHistogram.vue";
 import OperationTimes from "./analytical/OperationTimes.vue";
+import AggregateTimes from "./analytical/AggregateTimes.vue";
 
 import { ref, defineProps, watch } from "vue";
 import { useRoute } from "vue-router";
@@ -70,9 +71,14 @@ watch(
       </div>
 
       <div class="col-12 p-1 row">
-        <div class="col-12 col-lg-12">
+        <div class="col-6 col-lg-9">
           <div class="border-top border-bottom p-1 w-100">
             <OperationTimes class="" :assembly_name="assembly_url" />
+          </div>
+        </div>
+        <div class="col-6 col-lg-3">
+          <div class="border-top border-bottom p-1 w-100 h-100">
+            <AggregateTimes class="" :assembly_name="assembly_url" />
           </div>
         </div>
       </div>

@@ -1,6 +1,13 @@
 <template>
-  <div class="ratio ratio-1x1">
-    <v-chart class="chart" :option="option" autoresize />
+  <div class="row">
+    <!-- <div class="col-6">
+      <p class="" v-for="wl in wlReport">{{ wl.name }}: {{ wl.value }} Ops</p>
+    </div> -->
+    <div class="col-12">
+      <div class="ratio ratio-1x1" style="--bs-aspect-ratio: 50%;">
+        <v-chart class="chart" :option="option" autoresize />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -21,8 +28,8 @@ const props = defineProps(["assembly_name"]);
 function updateData() {
   fetch(
     import.meta.env.VITE_BACKEND_BASE_URL +
-      "assemblies/workloads/" +
-      props.assembly_name
+    "assemblies/workloads/" +
+    props.assembly_name
   )
     .then((jsonRes) => {
       return jsonRes.json();
@@ -36,8 +43,11 @@ function updateData() {
     })
     .then((jsonRes) => {
       option.value.series[0].data = jsonRes;
+      wlReport.value = jsonRes;
     });
 }
+
+const wlReport = ref();
 
 // ECharts Setup
 use([SVGRenderer, PieChart, TitleComponent, TooltipComponent, LegendComponent]);
@@ -70,7 +80,7 @@ const option = ref({
       },
       data: [{ name: "", value: 0 }],
       label: {
-        show: false,
+        show: true,
       },
       emphasis: {
         itemStyle: {

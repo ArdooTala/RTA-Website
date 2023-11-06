@@ -10,11 +10,16 @@ const props = defineProps(["assedPart"])
 
         <div class="col-12 row">
             <div class="col-3">
-                <p>Time</p>
+                <p>Start</p>
             </div>
             <div class="col-9 d-flex justify-content-between">
                 {{ assedPart.operations[0].start_time }}
-                <p> - </p>
+            </div>
+
+            <div class="col-3">
+                <p>Finish</p>
+            </div>
+            <div class="col-9 d-flex justify-content-between">
                 {{ assedPart.operations[assedPart.operations.length-1].end_time }}
             </div>
 

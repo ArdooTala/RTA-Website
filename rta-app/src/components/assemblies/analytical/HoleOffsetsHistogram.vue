@@ -1,6 +1,12 @@
 <template>
-  <div class="ratio ratio-1x1">
-    <v-chart class="chart" :option="option" autoresize />
+  <div class="row d-flex flex-column">
+      <div class="ratio ratio-4x3">
+        <v-chart class="chart" :option="option" autoresize />
+      </div>
+    <div class="mt-auto">
+      <p>Error Range: [{{ Math.min(...holeDist).toFixed(2) }} mm ~ {{ Math.max(...holeDist).toFixed(2) }} mm]</p>
+      <p>Average Error: {{ (holeDist.reduce((a, b) => a + b, 0) / holeDist.length).toFixed(2) }} mm</p>
+    </div>
   </div>
 </template>
 
@@ -45,8 +51,12 @@ const holeDist = computed(() => {
   let dists = hole_errors.value.map(
     (x) => Math.sqrt(x[0] * x[0] + x[1] * x[1]) * 1000
   );
+  return dists;
+});
+
+const histogramVals = computed(() => {
   let hist = histogram({
-    data: dists,
+    data: holeDist.value,
     bins: 10
   });
   return hist.map((x) => [(x.reduce((a, b) => a + b, 0) / x.length).toFixed(), x.length]);
@@ -89,7 +99,7 @@ const option = ref({
   },
   series: [
     {
-      data: holeDist,
+      data: histogramVals,
       type: "bar",
       showBackground: false,
       backgroundStyle: {

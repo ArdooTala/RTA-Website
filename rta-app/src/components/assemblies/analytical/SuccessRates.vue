@@ -1,6 +1,13 @@
 <template>
-  <div class="ratio ratio-1x1">
+<div class="row">
+    <div class="col-6">
+      <p class="" v-for="sr in sucRate">{{ sr.name }}: {{ sr.success }} / {{ sr.failed }} ({{ sr.value }}%)</p>
+    </div>
+    <div class="col-6">
+      <div class="ratio ratio-1x1">
     <v-chart class="chart" :option="option" autoresize />
+  </div>
+    </div>
   </div>
 </template>
 
@@ -38,13 +45,18 @@ function updateData() {
           value: Math.round(
             (Number(x.success_count) / Number(x.ops_count)) * 100
           ),
+          success: Number(x.success_count),
+          failed: Number(x.ops_count),
         };
       });
     })
     .then((jsonRes) => {
       option.value.series[0].data = jsonRes;
+      sucRate.value = jsonRes;
     });
 }
+
+const sucRate = ref();
 
 // ECharts Setup
 use([

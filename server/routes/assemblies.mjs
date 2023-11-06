@@ -589,6 +589,85 @@ router.get("/timestamps/:assembly_name", async (req, res) => {
   res.send(aggRes).status(200);
 });
 
+// Get all the assembly times
+router.get("/durations/", async (req, res) => {
+  const pipeline = [
+    {
+      '$sort': {
+        'start_time': 1
+      }
+    }, {
+      '$project': {
+        'operation': '$operation', 
+        'duration': {
+          '$subtract': [
+            '$end_time', '$start_time'
+          ]
+        }
+      }
+    }, {
+      '$group': {
+        '_id': '$operation.type', 
+        'duration': {
+          '$sum': '$duration'
+        }
+      }
+    }, {
+      '$sort': {
+        '_id': 1
+      }
+    }
+  ];
+
+  let collection = await db.collection("assembly_ops_2");
+  const aggCursor = collection.aggregate(pipeline);
+  let aggRes = await aggCursor.toArray();
+  // console.log(aggRes);
+  res.send(aggRes).status(200);
+});
+
+// Get the assembly's assembly times
+router.get("/durations/:assembly_name", async (req, res) => {
+  const pipeline = [
+    {
+      $match: {
+        "operation.assembly_name": req.params.assembly_name,
+      },
+    },
+    {
+      '$sort': {
+        'start_time': 1
+      }
+    }, {
+      '$project': {
+        'operation': '$operation', 
+        'duration': {
+          '$subtract': [
+            '$end_time', '$start_time'
+          ]
+        }
+      }
+    }, {
+      '$group': {
+        '_id': '$operation.type', 
+        'duration': {
+          '$sum': '$duration'
+        }
+      }
+    }, {
+      '$sort': {
+        '_id': 1
+      }
+    }
+  ];
+
+  let collection = await db.collection("assembly_ops_2");
+  const aggCursor = collection.aggregate(pipeline);
+  let aggRes = await aggCursor.toArray();
+  // console.log(aggRes);
+  res.send(aggRes).status(200);
+});
+
 // Get a single assembly by name
 router.get("/:name", async (req, res) => {
   let collection = await db.collection("assembly_ops");
@@ -600,74 +679,3 @@ router.get("/:name", async (req, res) => {
 });
 
 export default router;
-
-// [
-//   {
-//     $project: {
-//       assembly: 1,
-//       "operations.result": 1,
-//       succeeded: {
-//         $allElementsTrue: {
-//           $map: {
-//             input: "$operations",
-//             as: "op",
-//             in: {
-//               $eq: ["$$op.result", "sm_succeeded"],
-//             },
-//           },
-//         },
-//       },
-//     },
-//   },
-//   {
-//     $group: {
-//       _id: "$assembly.assembly_name",
-//       results: {
-//         $push: "$succeeded",
-//       },
-//     },
-//   },
-//   {
-//     $project: {
-//       ops_count: {
-//         $size: "$results",
-//       },
-//       success_count: {
-//         $size: {
-//           $filter: {
-//             input: "$results",
-//             as: "r",
-//             cond: {
-//               $eq: ["$$r", true],
-//             },
-//           },
-//         },
-//       },
-//       failure_count: {
-//         $size: {
-//           $filter: {
-//             input: "$results",
-//             as: "r",
-//             cond: {
-//               $eq: ["$$r", false],
-//             },
-//           },
-//         },
-//       },
-//     },
-//   },
-//   {
-//     $group: {
-//       _id: null,
-//       ops_count: {
-//         $sum: "$ops_count",
-//       },
-//       success_count: {
-//         $sum: "$success_count",
-//       },
-//       failure_count: {
-//         $sum: "$failure_count",
-//       },
-//     },
-//   },
-// ];
