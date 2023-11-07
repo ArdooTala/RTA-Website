@@ -1,8 +1,11 @@
 <template>
   <div class="row d-flex flex-column">
-      <div class="ratio ratio-4x3">
-        <v-chart class="chart" :option="option" autoresize />
-      </div>
+    <div class="ratio ratio-1x1">
+      <v-chart class="chart" :option="optionScatter" autoresize />
+    </div>
+    <div class="ratio ratio-4x3">
+      <v-chart class="chart" :option="optionHistogram" autoresize />
+    </div>
     <div class="mt-auto">
       <p>Error Range: [{{ Math.min(...holeDist).toFixed(2) }} mm ~ {{ Math.max(...holeDist).toFixed(2) }} mm]</p>
       <p>Average Error: {{ (holeDist.reduce((a, b) => a + b, 0) / holeDist.length).toFixed(2) }} mm</p>
@@ -38,12 +41,17 @@ function updateData() {
     .then((jsonRes) => {
       //   console.log(jsonRes);
       return jsonRes.map((p) => {
-        return p.report.split(",").slice(0, 2).map(Number);
+        return p.report
+          .split(",")
+          .slice(0, 2)
+          .map(Number)
+          .map((x) => x * 1000)
+          .concat(p.assembly);
       });
     })
     .then((jsonRes) => {
+      optionScatter.value.series[0].data = jsonRes;
       hole_errors.value = jsonRes;
-      //   console.log(jsonRes);
     });
 }
 
@@ -74,7 +82,39 @@ use([
 provide(THEME_KEY, "dark");
 
 // Get data and draw the chart
-const option = ref({
+const optionScatter = ref({
+  backgroundColor: "rgba(0,0,0,0)",
+  title: {
+    text: "HOLES OFFSET",
+    left: "left",
+  },
+  tooltip: {
+    trigger: "item",
+  },
+  xAxis: {
+    // interval: 0.5,
+    boundaryGap: ["10%", "10%"],
+  },
+  yAxis: {
+    // interval: 0.5,
+    boundaryGap: ["10%", "10%"],
+  },
+  series: [
+    {
+      symbolSize: 10,
+      data: [[0, 0, 0]],
+      type: "scatter",
+      encode: {
+        x: 0,
+        y: 1,
+        tooltip: 2,
+      },
+    },
+  ],
+});
+
+// Get data and draw the chart
+const optionHistogram = ref({
   backgroundColor: "rgba(0,0,0,0)",
   title: {
     text: "HOLES OFFSET HISTOGRAM",

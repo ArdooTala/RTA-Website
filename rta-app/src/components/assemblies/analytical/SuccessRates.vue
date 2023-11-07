@@ -1,12 +1,14 @@
 <template>
-<div class="row">
+  <div class="row">
     <div class="col-6">
-      <p class="" v-for="sr in sucRate">{{ sr.name }}: {{ sr.success }} / {{ sr.failed }} ({{ sr.value }}%)</p>
+      <p class="" v-for="sr in sucRate">
+        {{ sr.name }}: {{ sr.succeeded }} / {{ sr.failed }} ({{ sr.value }}%)
+      </p>
     </div>
     <div class="col-6">
       <div class="ratio ratio-1x1">
-    <v-chart class="chart" :option="option" autoresize />
-  </div>
+        <v-chart class="chart" :option="option" autoresize />
+      </div>
     </div>
   </div>
 </template>
@@ -45,7 +47,7 @@ function updateData() {
           value: Math.round(
             (Number(x.success_count) / Number(x.ops_count)) * 100
           ),
-          success: Number(x.success_count),
+          succeeded: Number(x.success_count),
           failed: Number(x.ops_count),
         };
       });
@@ -140,8 +142,6 @@ const option = ref({
   ],
 });
 
-// updateData();
-
 watch(props, () => {
   updateData();
 });
@@ -155,17 +155,14 @@ async function watchDB() {
     .then((jsonRes) => {
       if (jsonRes.last_update != last_update.last_update) {
         last_update = jsonRes;
-        // console.log(last_update, jsonRes);
         updateData();
       }
-      //   console.log(last_update);
     });
 }
 
 let polling = null;
 onMounted(() => {
   watchDB();
-  //   updateData();
   polling = setInterval(watchDB, 3000);
 });
 
@@ -175,7 +172,4 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-/* .chart {
-  height: 100px;
-} */
 </style>

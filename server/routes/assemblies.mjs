@@ -593,31 +593,67 @@ router.get("/timestamps/:assembly_name", async (req, res) => {
 router.get("/durations/", async (req, res) => {
   const pipeline = [
     {
-      '$sort': {
-        'start_time': 1
-      }
-    }, {
-      '$project': {
-        'operation': '$operation', 
-        'duration': {
-          '$subtract': [
-            '$end_time', '$start_time'
-          ]
-        }
-      }
-    }, {
-      '$group': {
-        '_id': '$operation.type', 
-        'duration': {
-          '$sum': '$duration'
-        }
-      }
-    }, {
-      '$sort': {
-        '_id': 1
-      }
-    }
+      $sort: {
+        start_time: 1,
+      },
+    },
+    {
+      $project: {
+        operation: "$operation",
+        executer: 1,
+        duration: {
+          $subtract: ["$end_time", "$start_time"],
+        },
+      },
+    },
+    {
+      $group: {
+        _id: {
+          type: "$operation.type",
+          executer: "$executer",
+        },
+        total: {
+          $sum: "$duration",
+        },
+        durations: {
+          $push: "$duration",
+        },
+      },
+    },
+    {
+      $sort: {
+        "_id.type": 1,
+      },
+    },
   ];
+
+  // [
+  //   {
+  //     '$sort': {
+  //       'start_time': 1
+  //     }
+  //   }, {
+  //     '$project': {
+  //       'operation': '$operation',
+  //       'duration': {
+  //         '$subtract': [
+  //           '$end_time', '$start_time'
+  //         ]
+  //       }
+  //     }
+  //   }, {
+  //     '$group': {
+  //       '_id': '$operation.type',
+  //       'duration': {
+  //         '$sum': '$duration'
+  //       }
+  //     }
+  //   }, {
+  //     '$sort': {
+  //       '_id': 1
+  //     }
+  //   }
+  // ];
 
   let collection = await db.collection("assembly_ops_2");
   const aggCursor = collection.aggregate(pipeline);
@@ -635,30 +671,38 @@ router.get("/durations/:assembly_name", async (req, res) => {
       },
     },
     {
-      '$sort': {
-        'start_time': 1
-      }
-    }, {
-      '$project': {
-        'operation': '$operation', 
-        'duration': {
-          '$subtract': [
-            '$end_time', '$start_time'
-          ]
-        }
-      }
-    }, {
-      '$group': {
-        '_id': '$operation.type', 
-        'duration': {
-          '$sum': '$duration'
-        }
-      }
-    }, {
-      '$sort': {
-        '_id': 1
-      }
-    }
+      $sort: {
+        start_time: 1,
+      },
+    },
+    {
+      $project: {
+        operation: "$operation",
+        executer: 1,
+        duration: {
+          $subtract: ["$end_time", "$start_time"],
+        },
+      },
+    },
+    {
+      $group: {
+        _id: {
+          type: "$operation.type",
+          executer: "$executer",
+        },
+        total: {
+          $sum: "$duration",
+        },
+        durations: {
+          $push: "$duration",
+        },
+      },
+    },
+    {
+      $sort: {
+        "_id.type": 1,
+      },
+    },
   ];
 
   let collection = await db.collection("assembly_ops_2");

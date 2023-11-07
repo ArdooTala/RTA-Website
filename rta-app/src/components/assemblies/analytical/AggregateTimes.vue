@@ -14,15 +14,13 @@ import {
     TitleComponent,
     TooltipComponent,
     LegendComponent,
-    ToolboxComponent,
-    DataZoomComponent,
-    VisualMapComponent,
-    GridComponent,
 } from "echarts/components";
 import VChart, { THEME_KEY } from "vue-echarts";
 import { ref, provide, watch, onMounted, onUnmounted } from "vue";
 
 const props = defineProps(["assembly_name"]);
+
+const OP_NAMES = { 0: "PICKING", 1: "PLACING", 2: "LOADING", 3: "SCREWING", 8: "HOME" };
 
 function updateData() {
     fetch(
@@ -34,15 +32,54 @@ function updateData() {
             return jsonRes.json();
         })
         .then((jsonRes) => {
-            let total = jsonRes.reduce((a, b) => a + b.duration, 0) / 1000;
-            let durations = jsonRes.map(x => x.duration / 1000);
-            let ops = jsonRes.map(x => x._id);
+            let totalDuration = jsonRes.reduce((a, b) => a + b.total, 0) / 1000;
 
+            let opDurations = jsonRes.map(x => {
+                return {
+                    name: OP_NAMES[x._id.type],
+                    value: Number(x.total / 1000),
+                    agent: x._id.executer,
+                }
+            });
+
+            let agents = [...new Set(jsonRes.map(x => x._id.executer))];
+            let opTypes = [...new Set(jsonRes.map(x => OP_NAMES[x._id.type]))];
+
+            let placeholders = opTypes.map(opT => opDurations
+                .filter(x => x.name == opT)
+                .map(x => x.value)
+                .reduce((a, b) => a + b, 0)
+            );
             const cumulativeSum = (sum => value => sum += value)(0);
 
-            option.value.series[0].data = [0, 0].concat(durations.map(cumulativeSum));
-            option.value.series[1].data = [total].concat(durations);
-            option.value.xAxis.data = ["Total",].concat(ops)
+            let placeholderSerie = {
+                name: "PlaceHolder",
+                type: 'bar',
+                stack: 'Total',
+                data: [0,].concat(placeholders.map(cumulativeSum)),
+                itemStyle: {
+                    borderColor: 'transparent',
+                    color: 'transparent'
+                },
+                emphasis: {
+                    itemStyle: {
+                        borderColor: 'transparent',
+                        color: 'transparent'
+                    }
+                },
+            };
+
+            let options = agents.map(agent => {
+                return {
+                    name: agent,
+                    type: 'bar',
+                    stack: 'Total',
+                    data: opDurations.filter(x => x.agent == agent)
+                };
+            });
+
+            option.value.xAxis.data = opTypes;
+            option.value.series = [placeholderSerie,].concat(options);
         });
 }
 
@@ -67,12 +104,18 @@ const option = ref({
     },
     xAxis: {
         type: "category",
-        data: ['Total', '0', '1', '2', '3'],
+        axisLabel: {
+            rotate: -90,
+            // interval: 0,
+        },
+        data: ['0', '1', '2', '3'],
     },
     yAxis: {
         type: "value",
     },
-    tooltip: {},
+    tooltip: {
+        formatter: '{a} [{b}]<br/>{c} seconds'
+    },
     series: [
         {
             name: "PlaceHolder",
@@ -89,12 +132,6 @@ const option = ref({
                     color: 'transparent'
                 }
             },
-        },
-        {
-            name: "Op Agg Times",
-            type: 'bar',
-            stack: 'Total',
-            data: [5, 1, 2, 1, 2],
         },
     ],
 });
@@ -114,10 +151,8 @@ async function watchDB() {
         .then((jsonRes) => {
             if (jsonRes.last_update != last_update.last_update) {
                 last_update = jsonRes;
-                // console.log(last_update, jsonRes);
                 updateData();
             }
-            //   console.log(last_update);
         });
 }
 
@@ -133,9 +168,5 @@ onUnmounted(() => {
 });
 </script>
   
-<style scoped>
-/* .chart {
-        height: 100px;
-      } */
-</style>
+<style scoped></style>
   
