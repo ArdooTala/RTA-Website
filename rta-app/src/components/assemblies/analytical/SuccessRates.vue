@@ -33,6 +33,26 @@ const OP_NAMES = { 0: "PICKING", 1: "PLACING", 2: "LOADING", 3: "SCREWING", 8: "
 function updateData() {
   fetch(
     import.meta.env.VITE_BACKEND_BASE_URL +
+    "assemblies/workloads/" +
+    props.assembly_name
+  )
+    .then((jsonRes) => {
+      return jsonRes.json();
+    })
+    .then((jsonRes) => {
+      jsonRes.sort((a, b) => a.count - b.count);
+
+      return jsonRes.reverse().map((x) => {
+        return { name: x._id.replaceAll("/", ""), value: x.count };
+      });
+    })
+    .then((jsonRes) => {
+      option.value.series[1].data = jsonRes;
+      wlReport.value = jsonRes;
+    });
+
+  fetch(
+    import.meta.env.VITE_BACKEND_BASE_URL +
     "assemblies/success_rate/" +
     props.assembly_name
   )
@@ -53,12 +73,14 @@ function updateData() {
       });
     })
     .then((jsonRes) => {
-      option.value.series[0].data = jsonRes;
+      option.value.series[0].data = jsonRes.map(x => x.value);
+      option.value.radiusAxis.data = jsonRes.map(x => x.name);
       sucRate.value = jsonRes;
     });
 }
 
 const sucRate = ref();
+const wlReport = ref();
 
 // ECharts Setup
 use([
@@ -75,15 +97,7 @@ provide(THEME_KEY, "dark");
 // Get data and draw the chart
 const option = ref({
   backgroundColor: "rgba(0,0,0,0)",
-  title: {
-    text: "OPERATIONS SUCCESS RATE",
-    left: "left",
-  },
-  legend: {
-    orient: "vertical",
-    left: "left",
-    top: "bottom",
-  },
+
   tooltip: {
     trigger: "item",
   },
@@ -94,23 +108,30 @@ const option = ref({
       show: true,
     },
   },
-
   radiusAxis: {
     type: "category",
-    // data: ["PICKING", "PLACING", "LOADING", "SCREWING"],
+    data: [],
     z: 10,
     axisLabel: {
-      color: 'white'
-    }
+      color: 'white',
+      
+    },
   },
-
+  legend: {
+    legend: {
+    orient: "vertical",
+    left: "left",
+    top: "middle",
+  },
+  },
   polar: {
-    radius: ["20%", "60%"],
+    radius: ["30%", "60%"],
   },
   series: [
     {
       type: "bar",
-      data: [],
+      data: [23, 11, 88],
+      radius: [0, '30%'],
       coordinateSystem: "polar",
       roundCap: true,
       itemStyle: {
@@ -118,27 +139,26 @@ const option = ref({
       },
       showBackground: true,
     },
-    // {
-    //   type: "pie",
-    //   radius: ["0%", "40%"],
-    //   itemStyle: {
-    //     borderRadius: 5,
-    //   },
-    //   data: [
-    //     { name: "A", value: 1 },
-    //     { name: "B", value: 2 },
-    //   ],
-    //   label: {
-    //     show: false,
-    //   },
-    //   emphasis: {
-    //     itemStyle: {
-    //       shadowBlur: 10,
-    //       shadowOffsetX: 0,
-    //       shadowColor: "rgba(0, 0, 0, 0.5)",
-    //     },
-    //   },
-    // },
+    {
+      name: "# of parts assembled",
+      type: "pie",
+      radius: ["0%", "25%"],
+      center: ["50%", "50%"],
+      itemStyle: {
+        borderRadius: 5,
+      },
+      data: [{ name: "", value: 0 }],
+      label: {
+        show: false,
+      },
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: "rgba(0, 0, 0, 0.5)",
+        },
+      },
+    },
   ],
 });
 
@@ -171,5 +191,4 @@ onUnmounted(() => {
 });
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

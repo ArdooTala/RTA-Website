@@ -42,7 +42,7 @@ function updateData() {
       });
     })
     .then((jsonRes) => {
-      option.value.series[0].data = jsonRes;
+      option.value.series[1].data = jsonRes;
       wlReport.value = jsonRes;
     });
 }
@@ -54,10 +54,10 @@ use([SVGRenderer, PieChart, TitleComponent, TooltipComponent, LegendComponent]);
 provide(THEME_KEY, "dark");
 
 // Get data and draw the chart
-const option = ref({
+const optionWL = ref({
   backgroundColor: "rgba(0,0,0,0)",
   title: {
-    text: "WORKLOAD",
+    text: "OPERATIONS & SUCCESS RATE",
     left: "left",
   },
   tooltip: {
@@ -70,6 +70,7 @@ const option = ref({
     top: "bottom",
   },
   series: [
+    
     {
       name: "# of parts assembled",
       type: "pie",
@@ -81,6 +82,67 @@ const option = ref({
       data: [{ name: "", value: 0 }],
       label: {
         show: true,
+      },
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: "rgba(0, 0, 0, 0.5)",
+        },
+      },
+    },
+  ],
+});
+
+// Get data and draw the chart
+const option = ref({
+  backgroundColor: "rgba(0,0,0,0)",
+
+  tooltip: {
+    trigger: "item",
+  },
+  angleAxis: {
+    max: 100,
+    startAngle: 90,
+    splitLine: {
+      show: true,
+    },
+  },
+  radiusAxis: {
+    type: "category",
+    // data: ["PICKING", "PLACING", "LOADING", "SCREWING"],
+    z: 10,
+    axisLabel: {
+      color: 'white'
+    }
+  },
+
+  polar: {
+    radius: ["30%", "60%"],
+  },
+  series: [
+    {
+      type: "bar",
+      data: [23, 11, 88],
+      radius: [0, '30%'],
+      coordinateSystem: "polar",
+      roundCap: true,
+      itemStyle: {
+        opacity: 1
+      },
+      showBackground: true,
+    },
+    {
+      name: "# of parts assembled",
+      type: "pie",
+      radius: ["0%", "25%"],
+      center: ["50%", "50%"],
+      itemStyle: {
+        borderRadius: 5,
+      },
+      data: [{ name: "", value: 0 }],
+      label: {
+        show: false,
       },
       emphasis: {
         itemStyle: {

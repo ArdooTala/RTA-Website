@@ -37,9 +37,9 @@ watch(
 
       <div class="col-12 p-1 row">
 
-        <div class="col-12 col-lg-6 border-top border-bottom p-1">
+        <!-- <div class="col-12 col-lg-6 border-top border-bottom p-1">
           <AgentWorkloads :assembly_name="assembly_url" />
-        </div>
+        </div> -->
 
         <div class="col-12 col-lg-6 border-top border-bottom p-1">
           <SuccessRates :assembly_name="assembly_url" />
