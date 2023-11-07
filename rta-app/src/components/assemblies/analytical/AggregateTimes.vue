@@ -1,6 +1,19 @@
 <template>
-    <div class="h-100">
-        <v-chart class="chart" :option="option" autoresize />
+    <div class="row">
+        <div class="col-4">
+            <div class="ratio" style="--bs-aspect-ratio: 200%;">
+                <v-chart class="chart" :option="optionAggregate" autoresize />
+            </div>
+        </div>
+        <div class="col-8">
+            <div class="row">
+                <div v-for="optOpDur in optionOpDurations" class="col-12 col-lg-6">
+                    <div class="ratio ratio-1x1">
+                        <v-chart class="chart" :option="optOpDur" autoresize />
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
   
@@ -17,6 +30,7 @@ import {
 } from "echarts/components";
 import VChart, { THEME_KEY } from "vue-echarts";
 import { ref, provide, watch, onMounted, onUnmounted } from "vue";
+import histogram from "histogramjs";
 
 const props = defineProps(["assembly_name"]);
 
@@ -32,22 +46,12 @@ function updateData() {
             return jsonRes.json();
         })
         .then((jsonRes) => {
-            let totalDuration = jsonRes.reduce((a, b) => a + b.total, 0) / 1000;
-
-            let opDurations = jsonRes.map(x => {
-                return {
-                    name: OP_NAMES[x._id.type],
-                    value: Number(x.total / 1000),
-                    agent: x._id.executer,
-                }
-            });
-
             let agents = [...new Set(jsonRes.map(x => x._id.executer))];
             let opTypes = [...new Set(jsonRes.map(x => OP_NAMES[x._id.type]))];
 
-            let placeholders = opTypes.map(opT => opDurations
-                .filter(x => x.name == opT)
-                .map(x => x.value)
+            let placeholders = opTypes.map(opT => jsonRes
+                .filter(x => OP_NAMES[x._id.type] == opT)
+                .map(x => x.total / 1000)
                 .reduce((a, b) => a + b, 0)
             );
             const cumulativeSum = (sum => value => sum += value)(0);
@@ -74,14 +78,81 @@ function updateData() {
                     name: agent,
                     type: 'bar',
                     stack: 'Total',
-                    data: opDurations.filter(x => x.agent == agent)
+                    data: jsonRes.filter(x => x._id.executer == agent).map(x => {
+                        return {
+                            name: OP_NAMES[x._id.type],
+                            value: Number(x.total / 1000),
+                        }
+                    }),
                 };
             });
 
-            option.value.xAxis.data = opTypes;
-            option.value.series = [placeholderSerie,].concat(options);
+            optionAggregate.value.xAxis.data = opTypes;
+            optionAggregate.value.series = [placeholderSerie,].concat(options);
+
+            let opDurs = opTypes.map(opT => {
+                return {
+                    name: opT,
+                    value: jsonRes
+                        .filter(x => OP_NAMES[x._id.type] == opT)
+                        .map(x => x.durations)
+                        .flat()
+                }
+
+            });
+
+            // optionOpDurations.value[0].series = opDurs.map(od => {
+            //     return {
+            //         name: od.name,
+            //         type: 'line',
+            //         data: od.value.toSorted((a, b) => a - b).map((x, j) => [j, x / 1000])
+            //     }
+            // });
+
+            optionOpDurations.value = opDurs.map(od => {
+                return {
+                    title: {
+                        text: od.name + " DURATIONS",
+                        left: "left",
+                    },
+                    backgroundColor: "rgba(0,0,0,0)",
+                    grid: {
+                        bottom: '10%',
+                        left: '3%',
+                        right: '3%',
+                        containLabel: true
+                    },
+                    xAxis: {
+                        type: "value",
+                        scale: true,
+                        axisLabel: {
+                            show: false
+                        }
+                    },
+                    yAxis: {
+                        type: "value",
+                        name: "Op Duration"
+                    },
+                    tooltip: {},
+                    series: [{
+                        name: od.name,
+                        type: 'bar',
+                        large: true,
+                        // data: makeHistogram(od.value, 100),
+                        data: od.value.toSorted((a, b) => a - b).map((x, j) => [j, x / 1000]),
+                    }],
+                };
+            });
         });
 }
+
+// function makeHistogram(vals, bins) {
+//     let hist = histogram({
+//         data: vals,
+//         bins: bins
+//     });
+//     return hist.map((x) => [(x.reduce((a, b) => a + b, 0) / x.length).toFixed(), x.length]);
+// }
 
 // ECharts Setup
 use([
@@ -93,13 +164,16 @@ use([
 ]);
 provide(THEME_KEY, "dark");
 
-const option = ref({
+const optionAggregate = ref({
     title: {
         text: "ASSEMBLY DURATIONS",
         left: "left",
     },
     backgroundColor: "rgba(0,0,0,0)",
     grid: {
+        bottom: 0,
+        left: '3%',
+        right: '3%',
         containLabel: true
     },
     xAxis: {
@@ -116,25 +190,10 @@ const option = ref({
     tooltip: {
         formatter: '{a} [{b}]<br/>{c} seconds'
     },
-    series: [
-        {
-            name: "PlaceHolder",
-            type: 'bar',
-            stack: 'Total',
-            data: [5, 1, 2, 1, 2],
-            itemStyle: {
-                borderColor: 'transparent',
-                color: 'transparent'
-            },
-            emphasis: {
-                itemStyle: {
-                    borderColor: 'transparent',
-                    color: 'transparent'
-                }
-            },
-        },
-    ],
+    series: [],
 });
+
+const optionOpDurations = ref([]);
 
 updateData();
 

@@ -35,7 +35,7 @@ onMounted(() => {
             ASSEMBLED PARTS
         </button>
 
-        <div class="collapse show" id="assembledPartsCollapseTarget">
+        <div class="collapse hide" id="assembledPartsCollapseTarget">
             <div class="accordion accordion-flush overflow-hidden" id="assembliesAccordion">
                 <div v-for="assedPart in assemblyOperations" class="accordion-item p-2 border-bottom bg-transparent">
                     <div class="accordion-header justify-content-between">

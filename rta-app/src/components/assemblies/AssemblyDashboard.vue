@@ -25,14 +25,15 @@ watch(
 
 <template>
   <div class="row h-100">
-    <div class="col-12 col-lg-4">
-      <p class="mb-auto display-3 text-center">{{ assembly_url || "OVERVIEW" }}</p>
-      <div class="border-top border-bottom p-1">
-        <AssembledPartsList :assembly_name="assembly_url" />
-      </div>
-    </div>
 
-    <div class="col-12 col-lg-8 row h-100 d-block justify-content-around" id="dashboard">
+    <div class="col-12 row h-100 d-block justify-content-around" id="dashboard">
+
+      <div class="col-12">
+        <p class="mb-auto display-1 text-center">{{ assembly_url || "OVERVIEW" }}</p>
+        <div class="border-top border-bottom p-1">
+          <AssembledPartsList :assembly_name="assembly_url" />
+        </div>
+      </div>
 
       <div class="col-12 p-1 row">
 
@@ -45,14 +46,11 @@ watch(
         </div>
 
       </div>
-      
+
+
       <div class="col-12 p-1 row">
 
-        <div class="col-6 col-lg-9 border-top border-bottom p-1">
-          <OperationTimes class="" :assembly_name="assembly_url" />
-        </div>
-
-        <div class="col-6 col-lg-3 border-top border-bottom p-1">
+        <div class="col-12 border-top border-bottom p-1">
           <AggregateTimes class="" :assembly_name="assembly_url" />
         </div>
 
@@ -66,11 +64,16 @@ watch(
 
       </div>
 
+      <div class="col-12 p-1 row">
+
+        <div class="col-6 col-lg-9 border-top border-bottom p-1">
+          <OperationTimes class="" :assembly_name="assembly_url" />
+        </div>
+
+      </div>
 
     </div>
   </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>
