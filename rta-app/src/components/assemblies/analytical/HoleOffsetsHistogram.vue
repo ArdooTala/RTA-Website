@@ -57,7 +57,7 @@ function updateData() {
 
 const holeDist = computed(() => {
   let dists = hole_errors.value.map(
-    (x) => Math.sqrt(x[0] * x[0] + x[1] * x[1]) * 1000
+    (x) => Math.sqrt(x[0] * x[0] + x[1] * x[1])
   );
   return dists;
 });
@@ -93,10 +93,16 @@ const optionScatter = ref({
   },
   xAxis: {
     // interval: 0.5,
+    min: -20,
+    max: 20,
+    interval: 5,
     boundaryGap: ["10%", "10%"],
   },
   yAxis: {
     // interval: 0.5,
+    min: -20,
+    max: 20,
+    interval: 5,
     boundaryGap: ["10%", "10%"],
   },
   series: [
@@ -127,7 +133,7 @@ const optionHistogram = ref({
   xAxis: {
     type: "value",
     // interval: 1,
-    boundaryGap: ["30%", "20%"],
+    boundaryGap: ["10%", "10%"],
   },
   yAxis: {
     type: "value",
