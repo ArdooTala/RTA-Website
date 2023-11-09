@@ -3,9 +3,6 @@
     <div class="ratio ratio-1x1">
       <v-chart class="chart" :option="optionScatter" autoresize />
     </div>
-    <div class="ratio ratio-1x1">
-      <v-chart class="chart" :option="optionHeatmap" autoresize />
-    </div>
     <div class="ratio ratio-4x3">
       <v-chart class="chart" :option="optionHistogram" autoresize />
     </div>
@@ -60,22 +57,22 @@ function updateData() {
     });
 }
 
-const gridSize = computed(() => {
-  let gridRange = [
-    Math.floor(hole_errors.value.reduce((m, x) => Math.min(
-      x[0], x[1], m), 0)),
-    Math.ceil(hole_errors.value.reduce((m, x) => Math.max(
-      x[0], x[1], m), 1)),
-  ];
-  console.log(gridRange);
-  return gridRange;
-});
+// const gridSize = computed(() => {
+//   let gridRange = [
+//     Math.floor(hole_errors.value.reduce((m, x) => Math.min(
+//       x[0], x[1], m), 0)),
+//     Math.ceil(hole_errors.value.reduce((m, x) => Math.max(
+//       x[0], x[1], m), 1)),
+//   ];
+//   console.log(gridRange);
+//   return gridRange;
+// });
 
-const hmRange = computed(() => {
-  // let hmRng =  Array.from(new Array(gridSize.value[1] - gridSize.value[0]), (x, i) => `${i - Math.abs(gridSize.value[0])}`);
-  let hmRng =  Array.from(new Array(40), (x, i) => `${i - 20}`);
-  return hmRng
-});
+// const hmRange = computed(() => {
+//   // let hmRng =  Array.from(new Array(gridSize.value[1] - gridSize.value[0]), (x, i) => `${i - Math.abs(gridSize.value[0])}`);
+//   let hmRng =  Array.from(new Array(40), (x, i) => `${i - 20}`);
+//   return hmRng
+// });
 
 const holeDist = computed(() => {
   return hole_errors.value.map(
@@ -150,7 +147,7 @@ const optionScatter = ref({
     {
       type: 'category',
       data: hmRange,
-      // show: false,
+      show: false,
     }
   ],
   yAxis: [
@@ -164,20 +161,20 @@ const optionScatter = ref({
     {
       type: 'category',
       data: hmRange,
-      // show: false,
+      show: false,
     },
   ],
-  visualMap: {
-    min: 0,
-    max: 10,// Math.max(...(heatmapVals.map(x => x[2]))),
-    calculable: true,
-    orient: 'horizontal',
-    left: 'center',
-    bottom: '15%',
-    inRange: {
-      opacity: [0, 0.8],
-    },
-  },
+  // visualMap: {
+  //   min: 0,
+  //   max: 10,// Math.max(...(heatmapVals.map(x => x[2]))),
+  //   calculable: true,
+  //   orient: 'horizontal',
+  //   left: 'center',
+  //   bottom: '15%',
+  //   inRange: {
+  //     opacity: [0, 0.8],
+  //   },
+  // },
   series: [
     {
       type: "scatter",
@@ -189,18 +186,14 @@ const optionScatter = ref({
         tooltip: 2,
       },
     },
-    {
-      name: "Errors Heatmap",
-      type: "heatmap",
-      xAxisIndex: 1,
-      yAxisIndex: 1,
-      coordinateSystem: 'cartesian2d',
-      data: heatmapVals,
-      // label: {
-      //   show: true
-      // },
-      // z: 5
-    },
+    // {
+    //   name: "Errors Heatmap",
+    //   type: "heatmap",
+    //   xAxisIndex: 1,
+    //   yAxisIndex: 1,
+    //   coordinateSystem: 'cartesian2d',
+    //   data: heatmapVals,
+    // },
   ],
 });
 
