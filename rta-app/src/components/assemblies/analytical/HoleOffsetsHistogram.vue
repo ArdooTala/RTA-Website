@@ -3,6 +3,9 @@
     <div class="ratio ratio-1x1">
       <v-chart class="chart" :option="optionScatter" autoresize />
     </div>
+    <div class="ratio ratio-1x1">
+      <v-chart class="chart" :option="optionHeatmap" autoresize />
+    </div>
     <div class="ratio ratio-4x3">
       <v-chart class="chart" :option="optionHistogram" autoresize />
     </div>
@@ -16,11 +19,12 @@
 <script setup>
 import { use } from "echarts/core";
 import { SVGRenderer, CanvasRenderer } from "echarts/renderers";
-import { BarChart, ScatterChart } from "echarts/charts";
+import { BarChart, HeatmapChart, ScatterChart } from "echarts/charts";
 import {
   TitleComponent,
   TooltipComponent,
   LegendComponent,
+  DataZoomComponent,
 } from "echarts/components";
 import VChart, { THEME_KEY } from "vue-echarts";
 import { ref, provide, onMounted, watch, computed, onUnmounted } from "vue";
@@ -45,9 +49,10 @@ function updateData() {
           .split(",")
           .slice(0, 2)
           .map(Number)
-          .map((x) => x * 1000)
+          .map(x => x * 1000)
           .concat(p.assembly);
-      });
+      })
+        .filter(x => !x.slice(0, 2).some(y => Number.isNaN(y)));
     })
     .then((jsonRes) => {
       optionScatter.value.series[0].data = jsonRes;
@@ -55,11 +60,27 @@ function updateData() {
     });
 }
 
+const gridSize = computed(() => {
+  let gridRange = [
+    Math.floor(hole_errors.value.reduce((m, x) => Math.min(
+      x[0], x[1], m), 0)),
+    Math.ceil(hole_errors.value.reduce((m, x) => Math.max(
+      x[0], x[1], m), 1)),
+  ];
+  console.log(gridRange);
+  return gridRange;
+});
+
+const hmRange = computed(() => {
+  // let hmRng =  Array.from(new Array(gridSize.value[1] - gridSize.value[0]), (x, i) => `${i - Math.abs(gridSize.value[0])}`);
+  let hmRng =  Array.from(new Array(40), (x, i) => `${i - 20}`);
+  return hmRng
+});
+
 const holeDist = computed(() => {
-  let dists = hole_errors.value.map(
+  return hole_errors.value.map(
     (x) => Math.sqrt(x[0] * x[0] + x[1] * x[1])
   );
-  return dists;
 });
 
 const histogramVals = computed(() => {
@@ -70,14 +91,31 @@ const histogramVals = computed(() => {
   return hist.map((x) => [(x.reduce((a, b) => a + b, 0) / x.length).toFixed(), x.length]);
 });
 
+const heatmapVals = computed(() => {
+  let grouped = hole_errors.value.reduce(
+    (entryMap, e) =>
+      entryMap.set(
+        Math.floor(e[0]).toString() + '+' + Math.floor(e[1]).toString(),
+        (entryMap.get(Math.floor(e[0]).toString() + '+' + Math.floor(e[1]).toString()) || 0) + 1
+      ),
+    new Map()
+  );
+  let hmVals = Array.from(grouped.entries()).map(x => [...x[0].split('+'), x[1]]);
+  console.log(hmVals);
+
+  return hmVals;
+});
+
 // ECharts Setup
 use([
   CanvasRenderer,
   ScatterChart,
   BarChart,
+  HeatmapChart,
   TitleComponent,
   TooltipComponent,
   LegendComponent,
+  DataZoomComponent,
 ]);
 provide(THEME_KEY, "dark");
 
@@ -91,30 +129,77 @@ const optionScatter = ref({
   tooltip: {
     trigger: "item",
   },
-  xAxis: {
-    // interval: 0.5,
-    min: -20,
-    max: 20,
-    interval: 5,
-    boundaryGap: ["10%", "10%"],
-  },
-  yAxis: {
-    // interval: 0.5,
-    min: -20,
-    max: 20,
-    interval: 5,
-    boundaryGap: ["10%", "10%"],
+  dataZoom: [
+    {
+      type: "inside",
+      start: 0,
+      end: 100,
+      xAxisIndex: [0, 1],
+      yAxisIndex: [0, 1],
+      filterMode: 'empty',
+    },
+  ],
+  xAxis: [
+    {
+      type: 'value',
+      min: -20, //gridSize[0],
+      max: 20,  //gridSize[1],
+      // interval: 5,
+      // boundaryGap: ["10%", "10%"],
+    },
+    {
+      type: 'category',
+      data: hmRange,
+      // show: false,
+    }
+  ],
+  yAxis: [
+    {
+      type: 'value',
+      min: -20, //gridSize[0],
+      max: 20,  //gridSize[1],
+      // interval: 5,
+      // boundaryGap: ["10%", "10%"],
+    },
+    {
+      type: 'category',
+      data: hmRange,
+      // show: false,
+    },
+  ],
+  visualMap: {
+    min: 0,
+    max: 10,// Math.max(...(heatmapVals.map(x => x[2]))),
+    calculable: true,
+    orient: 'horizontal',
+    left: 'center',
+    bottom: '15%',
+    inRange: {
+      opacity: [0, 0.8],
+    },
   },
   series: [
     {
-      symbolSize: 10,
-      data: [[0, 0, 0]],
       type: "scatter",
+      xAxisIndex: 0,
+      yAxisIndex: 0,
+      data: [[0, 0, 0]],
+      symbolSize: 5,
       encode: {
-        x: 0,
-        y: 1,
         tooltip: 2,
       },
+    },
+    {
+      name: "Errors Heatmap",
+      type: "heatmap",
+      xAxisIndex: 1,
+      yAxisIndex: 1,
+      coordinateSystem: 'cartesian2d',
+      data: heatmapVals,
+      // label: {
+      //   show: true
+      // },
+      // z: 5
     },
   ],
 });
