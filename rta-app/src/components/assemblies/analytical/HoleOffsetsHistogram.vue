@@ -68,11 +68,11 @@ function updateData() {
 //   return gridRange;
 // });
 
-// const hmRange = computed(() => {
-//   // let hmRng =  Array.from(new Array(gridSize.value[1] - gridSize.value[0]), (x, i) => `${i - Math.abs(gridSize.value[0])}`);
-//   let hmRng =  Array.from(new Array(40), (x, i) => `${i - 20}`);
-//   return hmRng
-// });
+const hmRange = computed(() => {
+  // let hmRng =  Array.from(new Array(gridSize.value[1] - gridSize.value[0]), (x, i) => `${i - Math.abs(gridSize.value[0])}`);
+  let hmRng =  Array.from(new Array(40), (x, i) => `${i - 20}`);
+  return hmRng
+});
 
 const holeDist = computed(() => {
   return hole_errors.value.map(
