@@ -13,29 +13,47 @@ import { RouterLink, RouterView } from "vue-router";
                 <div class="collapse navbar-collapse ms-5 justify-content-center" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item me-2">
-                            <RouterLink to="/" class="nav-link">HOME</RouterLink>
+                            <RouterLink to="/" class="nav-link">
+                                <i class="bi bi-house"></i>
+                                HOME
+                            </RouterLink>
                             <!-- <a class="nav-link active" aria-current="page" href="#">Home</a> -->
                         </li>
                         <li class="nav-item me-2">
-                            <RouterLink to="/projects" class="nav-link disabled">PROJECTS</RouterLink>
+                            <RouterLink to="/projects" class="nav-link disabled">
+                                <i class="bi bi-boxes"></i>PROJECTS
+                            </RouterLink>
                         </li>
                         <li class="nav-item me-2">
-                            <RouterLink to="/assemblies" class="nav-link">ASSEMBLIES</RouterLink>
+                            <RouterLink to="/assemblies" class="nav-link">
+                                <i class="bi bi-bricks"></i>
+                                ASSEMBLIES
+                            </RouterLink>
                         </li>
                         <li class="nav-item me-2">
-                            <RouterLink to="/mps" class="nav-link">MATERIALS</RouterLink>
+                            <RouterLink to="/mps" class="nav-link">
+                                <i class="bi bi-qr-code-scan"></i>
+                                MATERIALS
+                            </RouterLink>
                         </li>
                         <li class="nav-item dropdown me-2">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                                 aria-expanded="false">
+                                <i class="bi bi-info-circle"></i>
                                 ABOUT
                             </a>
                             <ul class="dropdown-menu">
                                 <li>
-                                    <RouterLink to="/about" class="dropdown-item">ABOUT</RouterLink>
+                                    <RouterLink to="/about" class="dropdown-item">
+                                        <i class="bi bi-info-circle"></i>
+                                        ABOUT
+                                    </RouterLink>
                                 </li>
                                 <li>
-                                    <RouterLink to="/team" class="dropdown-item">TEAM</RouterLink>
+                                    <RouterLink to="/team" class="dropdown-item">
+                                        <i class="bi bi-file-person"></i>
+                                        TEAM
+                                    </RouterLink>
                                 </li>
                             </ul>
                         </li>
