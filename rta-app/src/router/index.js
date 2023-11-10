@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import AssemblyDashboard from "../components/assemblies/AssemblyDashboard.vue";
 import MaterialDashboard from "../components/materials/MaterialDashboard.vue";
+import ManualAssemblyDashboard from "../components/assemblies/ManualAssemblyDashboard.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -11,14 +12,14 @@ const router = createRouter({
       component: HomeView,
       children: [
         {
-            path: 'about',
-            component: () => import("../views/AboutView.vue"),
+          path: "about",
+          component: () => import("../views/AboutView.vue"),
         },
         {
-            path: 'team',
-            component: () => import("../views/TeamView.vue"),
-        }
-      ]
+          path: "team",
+          component: () => import("../views/TeamView.vue"),
+        },
+      ],
     },
     {
       path: "/projects",
@@ -36,17 +37,22 @@ const router = createRouter({
       component: () => import("../views/AssembliesView.vue"),
       children: [
         {
-            path: '',
-            name: "assemblies",
-            component: AssemblyDashboard,
-            props: { assembly_name: '' }
+          path: "",
+          name: "assemblies",
+          component: AssemblyDashboard,
+          props: { assembly_name: "" },
         },
         {
-            path: ':assembly_name',
-            component: AssemblyDashboard,
-            props: true
-        }
-      ]
+          path: ":assembly_name",
+          component: AssemblyDashboard,
+          props: true,
+        },
+        {
+          path: "manual/:assembly_name",
+          component: ManualAssemblyDashboard,
+          props: true,
+        },
+      ],
     },
     {
       path: "/mps",
@@ -56,17 +62,17 @@ const router = createRouter({
       component: () => import("../views/MaterialPassportsView.vue"),
       children: [
         {
-            path: '',
-            name: "material_passports",
-            component: () => import("../components/materials/MaterialsList.vue"),
-            // props: { assembly_name: '' }
+          path: "",
+          name: "material_passports",
+          component: () => import("../components/materials/MaterialsList.vue"),
+          // props: { assembly_name: '' }
         },
         {
-            path: ':material_name',
-            component: MaterialDashboard,
-            props: true
-        }
-      ]
+          path: ":material_name",
+          component: MaterialDashboard,
+          props: true,
+        },
+      ],
     },
   ],
 });

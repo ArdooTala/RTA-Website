@@ -20,17 +20,20 @@ import {
   ToolboxComponent,
   DataZoomComponent,
   VisualMapComponent,
+  GridComponent,
 } from "echarts/components";
 import VChart, { THEME_KEY } from "vue-echarts";
 import { ref, provide, watch, onMounted, onUnmounted } from "vue";
 
-const props = defineProps(["assembly_name"]);
+const props = defineProps(["assembly_name", "manual"]);
 
 function updateData() {
   fetch(
     import.meta.env.VITE_BACKEND_BASE_URL +
-      "assemblies/timestamps/" +
-      props.assembly_name
+    "assemblies/" +
+    (props.manual ? 'manual/' : '') +
+    "timestamps/" +
+    props.assembly_name
   )
     .then((jsonRes) => {
       return jsonRes.json();
@@ -52,7 +55,7 @@ function updateData() {
         start.setTime(Date.parse(x.start_time));
         let end = new Date();
         end.setTime(Date.parse(x.end_time));
-        let d_name = x.assembly.assembly_name + " - " + x.assembly.part_name;
+        let d_name = x.assembly.part_name;
         return {
           name: d_name,
           value: [start, start, start, end, end],
@@ -62,7 +65,9 @@ function updateData() {
             borderWidth: 1,
           },
           tooltip: {
-            formatter: "{b}",
+            trigger: 'item',
+            formatter: (params, ticket, callback) => `${params.name}<br/>${params.value[1].toLocaleString()}<br/>${params.value[4].toLocaleString()}`,
+            // valueFormatter: (value) => value.split(',')[0] + '<br/>' + value.split(',')[3],
           },
         };
       });
@@ -74,6 +79,7 @@ function updateData() {
 
 // ECharts Setup
 use([
+  GridComponent,
   CanvasRenderer,
   BoxplotChart,
   LineChart,
@@ -119,26 +125,28 @@ const option = ref({
     //   boundaryGap: ["10%", "10%"],
   },
   tooltip: {
-    // trigger: "item",
-    // formatter: "{c}",
+    trigger: "item",
+    formatter: "{a}",
   },
-  toolbox: {
-    feature: {
-      dataZoom: {
-        yAxisIndex: "none",
-      },
-    },
-  },
+  // toolbox: {
+  //   feature: {
+  //     dataZoom: {
+  //       yAxisIndex: "none",
+  //     },
+  //   },
+  // },
   dataZoom: [
     {
       type: "inside",
       start: 0,
       end: 100,
+      xAxisIndex: 0,
+      yAxisIndex: 0,
     },
-    {
-      start: 0,
-      end: 100,
-    },
+    // {
+    //   start: 0,
+    //   end: 100,
+    // },
   ],
   series: [
     {

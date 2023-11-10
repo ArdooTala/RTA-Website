@@ -6,26 +6,41 @@ const router = express.Router();
 
 // Get a list of all the assemblies.
 router.get("/", async (req, res) => {
-  const pipeline = [
+  const pipelineAssOps = [
     { $project: { "operation.assembly_name": 1 } },
     { $group: { _id: "$operation.assembly_name", count: { $sum: 1 } } },
   ];
+  let collectionAssOps = await db.collection("assembly_ops_2");
+  const aggCursorAssOps = collectionAssOps.aggregate(pipelineAssOps);
 
-  let collection = await db.collection("assembly_ops_2");
-  const aggCursor = collection.aggregate(pipeline);
+  const pipelineOpRecs = [
+    {
+      $project: {
+        "operation.assembly_name": { $substr: ["$part_name", 1, 5] },
+      },
+    },
+    { $group: { _id: "$operation.assembly_name", count: { $sum: 1 } } },
+  ];
+  let collectionOpRecs = await db.collection("operation_records");
+  const aggCursorOpRecs = collectionOpRecs.aggregate(pipelineOpRecs);
 
-  let aggRes = await aggCursor.toArray();
-  // console.log(aggRes);
-  res.send(aggRes).status(200);
+  let aggResAssOps = (await aggCursorAssOps.toArray()).map((x) => {
+    x.manual = false;
+    return x;
+  });
+  let aggResOpRecs = (await aggCursorOpRecs.toArray()).map((x) => {
+    x.manual = true;
+    return x;
+  });
+  // console.log(aggResAssOps);
+
+  res.send(aggResAssOps.concat(aggResOpRecs)).status(200);
 });
 
 router.get("/operations", async (req, res) => {
   const pipeline = [
     {
       $sort:
-        /**
-         * Provide any number of field/order pairs.
-         */
         {
           start_time: 1,
         },
@@ -713,7 +728,7 @@ router.get("/durations/:assembly_name", async (req, res) => {
 });
 
 // Get a single assembly by name
-router.get("/:name", async (req, res) => {
+router.get("/robotic/:name", async (req, res) => {
   let collection = await db.collection("assembly_ops");
   let query = { "assembly.assembly_name": req.params.name };
   let result = await collection.findOne(query);
