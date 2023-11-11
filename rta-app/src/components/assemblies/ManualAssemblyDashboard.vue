@@ -6,6 +6,7 @@ import SuccessRateParts from "./analytical/SuccessRateParts.vue";
 import HoleOffsetsHistogram from "./analytical/HoleOffsetsHistogram.vue";
 import OperationTimes from "./analytical/OperationTimes.vue";
 import AggregateTimes from "./analytical/AggregateTimes.vue";
+import PartTimes from "./analytical/PartTimes.vue";
 
 import { ref, defineProps, watch } from "vue";
 import { useRoute } from "vue-router";
@@ -42,11 +43,11 @@ watch(
 
       <!-- <div class="col-12 p-1 row"> -->
 
-        <!-- <div class="col-12 col-lg-6 border-top border-bottom p-1">
+      <!-- <div class="col-12 col-lg-6 border-top border-bottom p-1">
           <AgentWorkloads :assembly_name="assembly_url" />
         </div> -->
 
-        <!-- <div class="col-12 col-lg-6 border-top border-bottom p-1">
+      <!-- <div class="col-12 col-lg-6 border-top border-bottom p-1">
           <SuccessRates :assembly_name="assembly_url" />
         </div> -->
 
@@ -55,7 +56,7 @@ watch(
 
       <!-- <div class="col-12 p-1 row"> -->
 
-        <!-- <div class="col-12 border-top border-bottom p-1">
+      <!-- <div class="col-12 border-top border-bottom p-1">
           <AggregateTimes class="" :assembly_name="assembly_url" />
         </div> -->
 
@@ -64,7 +65,15 @@ watch(
       <div class="col-12 p-1 row">
 
         <div class="col-12 col-lg-12 border-top border-bottom p-1">
-          <OperationTimes class="" :assembly_name="assembly_url" :manual="true"/>
+          <PartTimes class="" :assembly_name="assembly_url" :manual="true" />
+        </div>
+
+      </div>
+
+      <div class="col-12 p-1 row">
+
+        <div class="col-12 col-lg-12 border-top border-bottom p-1">
+          <OperationTimes class="" :assembly_name="assembly_url" :manual="true" />
         </div>
 
       </div>

@@ -28,10 +28,9 @@ router.get("/", async (req, res) => {
 router.get("/operations", async (req, res) => {
   const pipeline = [
     {
-      $sort:
-        {
-          start_time: 1,
-        },
+      $sort: {
+        start_time: 1,
+      },
     },
     {
       $group: {
@@ -56,10 +55,9 @@ router.get("/operations/:assembly_name", async (req, res) => {
   const pipeline = [
     { $match: { "operation.assembly_name": req.params.assembly_name } },
     {
-      $sort:
-        {
-          start_time: 1,
-        },
+      $sort: {
+        start_time: 1,
+      },
     },
     {
       $group: {
@@ -244,7 +242,7 @@ router.get("/timestamps/:assembly_name", async (req, res) => {
   const pipeline = [
     {
       $match: {
-        "part_name": {$regex: `P${req.params.assembly_name}.*`},
+        part_name: { $regex: `P${req.params.assembly_name}.*` },
       },
     },
     {
@@ -257,7 +255,7 @@ router.get("/timestamps/:assembly_name", async (req, res) => {
         "assembly.part_name": "$part_name",
         start_time: "$start_time",
         end_time: "$end_time",
-        type: '0',
+        type: "0",
       },
     },
   ];
@@ -270,93 +268,159 @@ router.get("/timestamps/:assembly_name", async (req, res) => {
 });
 
 // Get all the assembly times
-router.get("/durations/", async (req, res) => {
+router.get("/part_durations/", async (req, res) => {
   const pipeline = [
     {
-      $sort: {
+      $project: {
+        part_name: 1,
+        op_type: "0",
         start_time: 1,
+        end_time: 1,
+        time_span: {
+          $subtract: [
+            {
+              $dateFromString: {
+                dateString: "$end_time",
+              },
+            },
+            {
+              $dateFromString: {
+                dateString: "$start_time",
+              },
+            },
+          ],
+        },
+        durations: {
+          $map: {
+            input: "$durations",
+            as: "dur",
+            in: {
+              $let: {
+                vars: {
+                  durT: {
+                    $map: {
+                      input: "$$dur",
+                      as: "du",
+                      in: {
+                        $dateFromString: {
+                          dateString: "$$du",
+                        },
+                      },
+                    },
+                  },
+                },
+                in: {
+                  $subtract: [
+                    {
+                      $arrayElemAt: ["$$durT", 1],
+                    },
+                    {
+                      $arrayElemAt: ["$$durT", 0],
+                    },
+                  ],
+                },
+              },
+            },
+          },
+        },
       },
     },
     {
       $project: {
-        operation: "$operation",
-        executer: 1,
-        duration: {
-          $subtract: ["$end_time", "$start_time"],
+        part_name: 1,
+        start_time: 1,
+        end_time: 1,
+        time_span: 1,
+        total_duration: {
+          $sum: "$durations",
         },
-      },
-    },
-    {
-      $group: {
-        _id: {
-          type: "$operation.type",
-          executer: "$executer",
-        },
-        total: {
-          $sum: "$duration",
-        },
-        durations: {
-          $push: "$duration",
-        },
-      },
-    },
-    {
-      $sort: {
-        "_id.type": 1,
       },
     },
   ];
 
-  let collection = await db.collection("assembly_ops_2");
+  let collection = await db.collection("operation_records");
   const aggCursor = collection.aggregate(pipeline);
   let aggRes = await aggCursor.toArray();
   res.send(aggRes).status(200);
 });
 
 // Get the assembly's assembly times
-router.get("/durations/:assembly_name", async (req, res) => {
+router.get("/part_durations/:assembly_name", async (req, res) => {
   const pipeline = [
     {
       $match: {
-        "operation.assembly_name": req.params.assembly_name,
-      },
-    },
-    {
-      $sort: {
-        start_time: 1,
+        part_name: { $regex: `P${req.params.assembly_name}.*` },
       },
     },
     {
       $project: {
-        operation: "$operation",
-        executer: 1,
-        duration: {
-          $subtract: ["$end_time", "$start_time"],
-        },
-      },
-    },
-    {
-      $group: {
-        _id: {
-          type: "$operation.type",
-          executer: "$executer",
-        },
-        total: {
-          $sum: "$duration",
+        part_name: 1,
+        op_type: "0",
+        start_time: 1,
+        end_time: 1,
+        time_span: {
+          $subtract: [
+            {
+              $dateFromString: {
+                dateString: "$end_time",
+              },
+            },
+            {
+              $dateFromString: {
+                dateString: "$start_time",
+              },
+            },
+          ],
         },
         durations: {
-          $push: "$duration",
+          $map: {
+            input: "$durations",
+            as: "dur",
+            in: {
+              $let: {
+                vars: {
+                  durT: {
+                    $map: {
+                      input: "$$dur",
+                      as: "du",
+                      in: {
+                        $dateFromString: {
+                          dateString: "$$du",
+                        },
+                      },
+                    },
+                  },
+                },
+                in: {
+                  $subtract: [
+                    {
+                      $arrayElemAt: ["$$durT", 1],
+                    },
+                    {
+                      $arrayElemAt: ["$$durT", 0],
+                    },
+                  ],
+                },
+              },
+            },
+          },
         },
       },
     },
     {
-      $sort: {
-        "_id.type": 1,
+      $project: {
+        part_name: 1,
+        start_time: 1,
+        end_time: 1,
+        time_span: 1,
+        total_duration: {
+          $sum: "$durations",
+        },
       },
     },
   ];
 
-  let collection = await db.collection("assembly_ops_2");
+  let collection = await db.collection("operation_records");
   const aggCursor = collection.aggregate(pipeline);
   let aggRes = await aggCursor.toArray();
   // console.log(aggRes);

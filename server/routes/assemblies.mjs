@@ -40,10 +40,9 @@ router.get("/", async (req, res) => {
 router.get("/operations", async (req, res) => {
   const pipeline = [
     {
-      $sort:
-        {
-          start_time: 1,
-        },
+      $sort: {
+        start_time: 1,
+      },
     },
     {
       $group: {
@@ -735,6 +734,164 @@ router.get("/robotic/:name", async (req, res) => {
 
   if (!result) res.send("Not found").status(404);
   else res.send(result).status(200);
+});
+
+// Get all the assembly times
+router.get("/part_durations/", async (req, res) => {
+  const pipeline = [
+    {
+      $group: {
+        _id: {
+          part_name: "$operation.part_name",
+          op_type: "$operation.type",
+        },
+        durations: {
+          $push: {
+            $arrayElemAt: [
+              {
+                $zip: {
+                  inputs: [["$start_time"], ["$end_time"]],
+                },
+              },
+              0,
+            ],
+          },
+        },
+        start_time: {
+          $min: "$start_time",
+        },
+        end_time: {
+          $max: "$end_time",
+        },
+      },
+    },
+    {
+      $project: {
+        part_name: "$_id.part_name",
+        op_type: "$_id.op_type",
+        start_time: 1,
+        end_time: 1,
+        time_span: {
+          $subtract: ["$end_time", "$start_time"],
+        },
+        durations: {
+          $map: {
+            input: "$durations",
+            as: "dur",
+            in: {
+              $subtract: [
+                {
+                  $arrayElemAt: ["$$dur", 1],
+                },
+                {
+                  $arrayElemAt: ["$$dur", 0],
+                },
+              ],
+            },
+          },
+        },
+      },
+    },
+    {
+      $project: {
+        part_name: 1,
+        op_type: 1,
+        start_time: 1,
+        end_time: 1,
+        time_span: 1,
+        total_duration: {
+          $sum: "$durations",
+        },
+      },
+    },
+  ];
+
+  let collection = await db.collection("assembly_ops_2");
+  const aggCursor = collection.aggregate(pipeline);
+  let aggRes = await aggCursor.toArray();
+  res.send(aggRes).status(200);
+});
+
+// Get the assembly's assembly times
+router.get("/part_durations/:assembly_name", async (req, res) => {
+  const pipeline = [
+    {
+      $match: {
+        "operation.assembly_name": req.params.assembly_name,
+      },
+    },
+    {
+      $group: {
+        _id: {
+          part_name: "$operation.part_name",
+          op_type: "$operation.type",
+        },
+        durations: {
+          $push: {
+            $arrayElemAt: [
+              {
+                $zip: {
+                  inputs: [["$start_time"], ["$end_time"]],
+                },
+              },
+              0,
+            ],
+          },
+        },
+        start_time: {
+          $min: "$start_time",
+        },
+        end_time: {
+          $max: "$end_time",
+        },
+      },
+    },
+    {
+      $project: {
+        part_name: "$_id.part_name",
+        op_type: "$_id.op_type",
+        start_time: 1,
+        end_time: 1,
+        time_span: {
+          $subtract: ["$end_time", "$start_time"],
+        },
+        durations: {
+          $map: {
+            input: "$durations",
+            as: "dur",
+            in: {
+              $subtract: [
+                {
+                  $arrayElemAt: ["$$dur", 1],
+                },
+                {
+                  $arrayElemAt: ["$$dur", 0],
+                },
+              ],
+            },
+          },
+        },
+      },
+    },
+    {
+      $project: {
+        part_name: 1,
+        op_type: 1,
+        start_time: 1,
+        end_time: 1,
+        time_span: 1,
+        total_duration: {
+          $sum: "$durations",
+        },
+      },
+    },
+  ];
+
+  let collection = await db.collection("assembly_ops_2");
+  const aggCursor = collection.aggregate(pipeline);
+  let aggRes = await aggCursor.toArray();
+  // console.log(aggRes);
+  res.send(aggRes).status(200);
 });
 
 export default router;
