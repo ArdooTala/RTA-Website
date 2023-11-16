@@ -1,5 +1,5 @@
 <template>
-    <div class="col-12 col-lg-8">
+    <div class="col-12">
         <div class="mb-2 py-5 border-bottom border-top">
             <p class="text-center display-2">{{ material_name }}</p>
             <p class="text-center mb-0">Not Found</p>

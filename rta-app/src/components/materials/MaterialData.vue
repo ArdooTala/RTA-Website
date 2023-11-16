@@ -1,5 +1,5 @@
 <template>
-    <div class="col-12 col-md-6 col-lg-4">
+    <div class="col-12">
         <div class="mb-2 py-5 border-bottom border-top">
             <p class="text-center display-2">{{ material_data.name }}</p>
         </div>
@@ -56,8 +56,69 @@
                         <div class="accordion-body">
                             <p>Assembly: {{ record.assembly }}</p>
                             <p>Timestamp: {{ new Date(record.timestamp).toLocaleString() }}</p>
-                            <router-link :to="'/mps/' + record.part_name" type="button"
-                                class="btn btn-dark border w-100 mt-4 disabled">Open in Dashboard</router-link>
+                            <div class="d-flex">
+                                <router-link :to="'/mps/' + record.part_name" type="button"
+                                    class="btn btn-dark border flex-fill disabled">Open in Dashboard</router-link>
+
+                                <button type="button" class="btn btn-danger ms-2" data-bs-toggle="modal"
+                                    :data-bs-target="'#deleteModal'+record.part_name">
+                                    <i class="bi bi-trash3"></i>
+                                </button>
+
+                                <div class="modal fade" :id="'deleteModal'+record.part_name" tabindex="-1">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel">Are you sure you want to
+                                                    delete this record?</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="text-center">
+                                                    <p class="display-6">{{ record.part_name }}</p>
+                                                    <p>WILL BE DELETED FROM</p>
+                                                    <p class="display-6">{{ material_data.name }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer d-flex">
+                                                <button type="button" class="btn btn-secondary flex-fill" data-bs-dismiss="modal">
+                                                    No
+                                                </button>
+                                                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                                    :data-bs-target="'#confirmDeleteModal'+record.part_name">
+                                                    Yes
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="modal fade" :id="'confirmDeleteModal'+record.part_name" tabindex="-1">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel">Are you f**king sure?</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="text-center">
+                                                    <p class="display-6">{{ material_data.name }}</p>
+                                                    <p>IS NOT USED IN</p>
+                                                    <p class="display-6">{{ record.part_name }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer d-flex">
+                                                <button type="button" class="btn btn-secondary flex-fill" data-bs-dismiss="modal">
+                                                    No
+                                                </button>
+                                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="(e) => deleteRecord(record.part_name)">
+                                                    Sure
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -70,7 +131,7 @@
 import { ref, defineProps, computed } from "vue";
 
 const props = defineProps(["material_data"]);
-const newRecPart1 = ref("PSM01");
+const newRecPart1 = ref("");
 const newRecPart2 = ref("");
 const newRecPart3 = ref("");
 
@@ -78,7 +139,7 @@ const selection_is_valid = computed(() => {
     if (newRecPart1.value.length <= 0) return false;
     if (newRecPart2.value.length <= 0) return false;
     if (newRecPart3.value.length <= 0) return false;
-    
+
     return true;
 });
 
@@ -91,7 +152,7 @@ function addRecord() {
             body: JSON.stringify({
                 part_name: newRecPart1.value + "-" + String(newRecPart2.value).padStart(2, '0') + "-" + String(newRecPart3.value).padStart(2, '0'),
                 timestamp: new Date(),
-                assembly: "Second",
+                assembly: "ManualEntry",
                 block_name: props.material_data.name
             }),
             headers: {
@@ -100,6 +161,23 @@ function addRecord() {
         })
         .then((response) => response.json())
         .then((json) => newRecPart3.value = "")
+        .then(() => emit_refresh('added-to-db'));
+}
+
+function deleteRecord(pname) {
+    fetch(import.meta.env.VITE_BACKEND_BASE_URL + "records/material_record/",
+        {
+            method: "DELETE",
+            body: JSON.stringify({
+                part_name: pname,
+                block_name: props.material_data.name
+            }),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+        })
+        .then((response) => response.json())
+        // .then((json) => newRecPart3.value = "")
         .then(() => emit_refresh('added-to-db'));
 }
 </script>

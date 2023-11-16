@@ -33,20 +33,19 @@ watch(props, () => {
 </script>
 
 <template>
-    <div class="row h-100 d-flex align-items-center justify-content-center" id="material_dashboard">
-        <div class="col-12 row">
-            <div v-if="found" class="col-12 d-flex justify-content-center">
-                <MaterialData v-for="material_data in materials_data" :material_data="material_data" @added-to-db="updateData"/>
-            </div>
-            <div v-else class="col-12 d-flex justify-content-center">
-                <MaterialAdd :material_name="material_name" @added-to-db="updateData"/>
-                <!-- <div class="col-12 col-lg-8">
+    <div class="row h-100 d-flex justify-content-center" id="material_dashboard">
+        <div v-if="found" class="col-12 d-flex justify-content-center">
+            <MaterialData v-for="material_data in materials_data" :material_data="material_data"
+                @added-to-db="updateData" />
+        </div>
+        <div v-else class="col-12 d-flex justify-content-center">
+            <MaterialAdd :material_name="material_name" @added-to-db="updateData" />
+            <!-- <div class="col-12 col-lg-8">
                     <p class="text-center py-5 display-2 border-bottom border-top">{{ material_name }}</p>
                     <button class="btn btn-dark border w-100 mb-2" type="button" @click="addToDB">
                         ADD TO DATABASE
                     </button>
                 </div> -->
-            </div>
         </div>
     </div>
 </template>

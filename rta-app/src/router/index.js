@@ -59,14 +59,8 @@ const router = createRouter({
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
-      component: () => import("../views/MaterialPassportsView.vue"),
+      component: () => import("../components/materials/MaterialsList.vue"),
       children: [
-        {
-          path: "",
-          name: "material_passports",
-          component: () => import("../components/materials/MaterialsList.vue"),
-          // props: { assembly_name: '' }
-        },
         {
           path: ":material_name",
           component: MaterialDashboard,
