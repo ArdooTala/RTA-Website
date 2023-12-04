@@ -40,23 +40,31 @@ router.get("/operation_record", async (req, res) => {
   res.send(result).status(200);
 });
 
+// router.post("/operation_record", async (req, res) => {
+//   let doc = req.body;
+//   doc.timestamp = new Date();
+//   const collection = await db.collection("operation_records");
+//   const result = await collection.insertOne(doc);
+//   // console.log(`${result.insertedCount} documents were inserted`);
+//   res.send(result).status(201);
+// });
+
 router.post("/operation_record", async (req, res) => {
   let doc = req.body;
-  doc.timestamp = new Date();
-  const collection = await db.collection("operation_records");
-  const result = await collection.insertOne(doc);
-  // console.log(`${result.insertedCount} documents were inserted`);
-  res.send(result).status(201);
-});
-
-router.put("/operation_record", async (req, res) => {
-  let doc = req.body;
+  if (Object.keys(req.query).length === 0) {
+    doc.timestamp = new Date();
+    const collection = await db.collection("operation_records");
+    const result = await collection.insertOne(doc);
+    // console.log(`${result.insertedCount} documents were inserted`);
+    res.send(result).status(201);
+    return
+  }
   const options = { upsert: true };
   doc["$setOnInsert"] = {"timestamp": new Date()};
   const collection = await db.collection("operation_records");
   const result = await collection.updateOne(req.query, doc, options);
   // console.log(`${result.insertedCount} documents were inserted`);
-  res.send(result).status(201);
+  res.send(result).status(202);
 });
 
 router.delete("/operation_record", async (req, res) => {
