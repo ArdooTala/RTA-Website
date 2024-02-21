@@ -8,18 +8,36 @@ import OperationTimes from "./analytical/OperationTimes.vue";
 import AggregateTimes from "./analytical/AggregateTimes.vue";
 import PartTimes from "./analytical/PartTimes.vue";
 
-import { ref, defineProps, watch } from "vue";
+import { ref, defineProps, watch, computed } from "vue";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
 const props = defineProps(["assembly_name"]);
+
 const assembly_url = ref(props.assembly_name);
+const partsList = ref([])
+
+function getAssemblyParts() {
+  fetch(import.meta.env.VITE_BACKEND_BASE_URL + "clusters/" + props.assembly_name)
+    .then((jsonRes) => {
+      return jsonRes.json();
+    })
+    .then((jsonRes) => {
+      console.log(jsonRes);
+      return jsonRes.object.children.objects;
+    })
+    .then((jsonRes) => {
+      partsList.value = jsonRes;
+    });
+}
+getAssemblyParts();
 
 watch(
   () => props.assembly_name,
   (new_assembly_name) => {
     assembly_url.value = new_assembly_name;
     // console.log("WATCH " + assembly_url.value);
+    getAssemblyParts();
   }
 );
 </script>
@@ -34,6 +52,10 @@ watch(
         <div class="border-top border-bottom p-1">
           <AssembledPartsList :assembly_name="assembly_url" />
         </div>
+      </div>
+
+      <div class="col12">
+        <!-- <p>{{ partsList }}</p> -->
       </div>
 
       <div class="col-12 p-1 row">

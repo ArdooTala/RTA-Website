@@ -56,8 +56,8 @@ export default {
             data-bs-parent="#assembliesAccordion">
             <div class="accordion-body">
               <AssemblyCard class="">
-                <template #start>{{ ass._id }}</template>
-                <template #end>{{ ass._id }}</template>
+                <!-- <template #start>{{ ass._id }}</template>
+                <template #end>{{ ass._id }}</template> -->
                 <template #parts_count>{{ ass.count }}</template>
               </AssemblyCard>
 
