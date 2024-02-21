@@ -42,7 +42,6 @@ function getMatTypes() {
             return jsonRes.json();
         })
         .then((jsonRes) => {
-            // console.log(jsonRes);
             blk_types.value = jsonRes;
             checkedNames.value = blk_types.value.map((x) => x._id);
         });
@@ -112,7 +111,7 @@ watch(checkedNames, () => {
 
                                             <div class="col-12">
                                                 <template v-for="blk_type in blk_types">
-                                                    <template v-if="blk_type._id.includes(typeID)">
+                                                    <template v-if="blk_type._id?.includes(typeID)">
                                                         <input class="btn-check" type="checkbox" :id="blk_type._id"
                                                             :value="blk_type._id" v-model="checkedNames" />
                                                         <label class="btn btn-dark d-flex justify-content-between my-1"
