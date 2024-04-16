@@ -304,6 +304,7 @@ router.get("/part_durations/", async (req, res) => {
                       in: {
                         $dateFromString: {
                           dateString: "$$du",
+                          onError: "$$du",
                         },
                       },
                     },
@@ -386,6 +387,7 @@ router.get("/part_durations/:assembly_name", async (req, res) => {
                       in: {
                         $dateFromString: {
                           dateString: "$$du",
+                          onError: "$$du",
                         },
                       },
                     },
