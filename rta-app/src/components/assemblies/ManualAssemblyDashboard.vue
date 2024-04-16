@@ -14,12 +14,26 @@ import { useRoute } from "vue-router";
 const route = useRoute();
 const props = defineProps(["assembly_name"]);
 const assembly_url = ref(props.assembly_name);
+const speckleId = ref()
+
+function getAssemblySpeckleID() {
+  fetch(import.meta.env.VITE_BACKEND_BASE_URL + "clusters/" + props.assembly_name + "/speckleid")
+    .then((jsonRes) => {
+      return jsonRes.json();
+    })
+    .then((jsonRes) => {
+      console.log(jsonRes);
+      speckleId.value = jsonRes;
+    })
+}
+getAssemblySpeckleID();
 
 watch(
   () => props.assembly_name,
   (new_assembly_name) => {
     assembly_url.value = new_assembly_name;
     // console.log("WATCH " + assembly_url.value);
+    getAssemblySpeckleID();
   }
 );
 </script>
@@ -61,6 +75,15 @@ watch(
         </div> -->
 
       <!-- </div> -->
+
+      <div class="col-12 p-1 row">
+
+        <div v-if="speckleId" class="col-12 col-lg-6 border-top border-bottom p-1">
+          <img :src="'https://app.speckle.systems/preview/' + speckleId.streamId + '/objects/' + speckleId.objectId"
+            alt="" />
+        </div>
+
+      </div>
 
       <div class="col-12 p-1 row">
 

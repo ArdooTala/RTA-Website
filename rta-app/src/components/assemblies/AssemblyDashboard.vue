@@ -12,10 +12,11 @@ import { ref, defineProps, watch, computed } from "vue";
 import { useRoute } from "vue-router";
 
 const route = useRoute();
-const props = defineProps(["assembly_name"]);
+const props = defineProps(["assembly_name", ]);
 
 const assembly_url = ref(props.assembly_name);
 const partsList = ref([])
+const speckleId = ref()
 
 function getAssemblyParts() {
   fetch(import.meta.env.VITE_BACKEND_BASE_URL + "clusters/" + props.assembly_name)
@@ -32,12 +33,25 @@ function getAssemblyParts() {
 }
 getAssemblyParts();
 
+function getAssemblySpeckleID() {
+  fetch(import.meta.env.VITE_BACKEND_BASE_URL + "clusters/" + props.assembly_name + "/speckleid")
+    .then((jsonRes) => {
+      return jsonRes.json();
+    })
+    .then((jsonRes) => {
+      console.log(jsonRes);
+      speckleId.value = jsonRes;
+    })
+}
+getAssemblySpeckleID();
+
 watch(
   () => props.assembly_name,
   (new_assembly_name) => {
     assembly_url.value = new_assembly_name;
     // console.log("WATCH " + assembly_url.value);
     getAssemblyParts();
+    getAssemblySpeckleID()
   }
 );
 </script>
@@ -74,6 +88,10 @@ watch(
 
         <div class="col-12 col-lg-6 border-top border-bottom p-1">
           <SuccessRates :assembly_name="assembly_url" />
+        </div>
+
+        <div v-if="speckleId" class="col-12 col-lg-6 border-top border-bottom p-1">
+          <img :src="'https://app.speckle.systems/preview/'+ speckleId.streamId + '/objects/' + speckleId.objectId" alt="" />
         </div>
 
       </div>

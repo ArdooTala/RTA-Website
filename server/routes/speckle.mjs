@@ -115,4 +115,23 @@ router.get("/:cluster_name", async (req, res) => {
   res.send(data.stream).status(200);
 });
 
+// Get a list of the Parts in an assembly.
+router.get("/:cluster_name/speckleid", async (req, res) => {
+  let collection = await db.collection("clusters");
+
+  // Query for a movie that has the title 'Back to the Future'
+  const mongoQuery = { name: req.params.cluster_name };
+  const speckleID = await collection.findOne(mongoQuery);
+
+  if (!speckleID) {
+    res.send({}).status(400);
+    return;
+  }
+
+  res.send(JSON.stringify({
+    streamId: speckleID.speckle.stream_id,
+    objectId: speckleID.speckle.referenced_object,
+  })).status(200);
+});
+
 export default router;
