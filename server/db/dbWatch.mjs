@@ -5,13 +5,12 @@ import { ObjectId } from "mongodb";
 const router = express.Router();
 
 let last_update = Date.now();
-// const collection = await db.collection("assembly_ops");
 
 let changeStream;
 async function run() {
   console.log("Running MongoDB WATCH");
   try {
-    const collection = await db.collection("assembly_ops");
+    const collection = await db.collection("assembly_ops_2");
     // Open a Change Stream on the "haikus" collection
     changeStream = collection.watch();
     // Print change events
